@@ -1,0 +1,10 @@
+Cmake安裝網址: https://cmake.org/download/
+選擇下面.msi檔案安裝 安裝後將C:\Program Files\CMake\bin放到環境變數
+
+
+vscode內插件需要安裝C/C++, CMake, CMake tools, Qt tools
+
+最後建置時 選擇未指定 讓cmake猜測編譯器 自己指定qt的mingw有可能會報錯
+
+
+詳細影片說明: https://www.bilibili.com/video/BV1xx4y1s7e5/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=a7ec40e3a00a70629191f9c178661833

@@ -1,0 +1,10 @@
+^C:\USERS\USER\DESKTOP\DIGITAL_IMAGE_PROCESS_113_1_BIME\01.HW\CODE\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code -BC:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build --check-stamp-file C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

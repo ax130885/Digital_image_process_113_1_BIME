@@ -1,0 +1,4 @@
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/CMakeFiles/code.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/CMakeFiles/INSTALL.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/CMakeFiles/ZERO_CHECK.dir
