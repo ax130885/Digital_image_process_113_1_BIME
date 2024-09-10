@@ -1,0 +1,19 @@
+# ninja log v6
+6	904	7476181135020249	code_autogen/timestamp	db30a98a153996c4
+6	904	7476181135020249	code_autogen/mocs_compilation.cpp	db30a98a153996c4
+6	904	7476181135020249	C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/code_autogen/timestamp	db30a98a153996c4
+6	904	7476181135020249	C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/code_autogen/mocs_compilation.cpp	db30a98a153996c4
+912	3420	7476181135778219	CMakeFiles/code.dir/main.cpp.obj	618ac602cc7c54c2
+914	3430	7476181135798162	CMakeFiles/code.dir/mainwindow.cpp.obj	541ae65f85f1d7be
+920	3472	7476181135858009	CMakeFiles/code.dir/secondwindow.cpp.obj	a5ae8c33f5c4b758
+917	3526	7476181135828087	CMakeFiles/code.dir/ImageProcessor.cpp.obj	d1568962f6f11ab2
+909	3595	7476181135748299	CMakeFiles/code.dir/code_autogen/mocs_compilation.cpp.obj	ec79537b17c593d8
+922	4000	7476181135877953	CMakeFiles/code.dir/secondprocess.cpp.obj	8e5f352ca1585a01
+4000	4160	7476181166662493	code.exe	2658fdedb232c60c
+22	161	7476488329042185	code_autogen/timestamp	db30a98a153996c4
+22	161	7476488329042185	code_autogen/mocs_compilation.cpp	db30a98a153996c4
+22	161	7476488329042185	C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/code_autogen/timestamp	db30a98a153996c4
+22	161	7476488329042185	C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/code_autogen/mocs_compilation.cpp	db30a98a153996c4
+162	2348	7476488330459267	CMakeFiles/code.dir/mainwindow.cpp.obj	541ae65f85f1d7be
+164	2349	7476488330489189	CMakeFiles/code.dir/secondwindow.cpp.obj	a5ae8c33f5c4b758
+2349	2501	7476488352339525	code.exe	2658fdedb232c60c

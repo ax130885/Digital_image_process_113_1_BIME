@@ -10,6 +10,15 @@
     <ClCompile Include="C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\mainwindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\ImageProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\secondwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\secondprocess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\build\code_autogen\mocs_compilation_Release.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -22,6 +31,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\mainwindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\ImageProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\secondwindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\secondprocess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\build\code_autogen\include_Debug\ui_mainwindow.h">

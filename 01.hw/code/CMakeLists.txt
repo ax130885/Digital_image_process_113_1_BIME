@@ -10,13 +10,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Set OpenCV_DIR to the directory containing OpenCVConfig.cmake
-set(OpenCV_DIR "C:/opencv/build/x64/vc16/lib")
-
-# Find Qt and OpenCV
+# Find Qt
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-find_package(OpenCV REQUIRED)
 
 # Add source files
 set(PROJECT_SOURCES
@@ -24,6 +20,12 @@ set(PROJECT_SOURCES
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
+    ImageProcessor.cpp
+    ImageProcessor.h
+    secondwindow.cpp
+    secondwindow.h
+    secondprocess.cpp
+    secondprocess.h
 )
 
 # Configure the Qt executable target
@@ -31,6 +33,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(code
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        mainwindow.h mainwindow.cpp
+        ImageProcessor.h ImageProcessor.cpp
+        secondwindow.h secondwindow.cpp
+        secondprocess.h secondprocess.cpp
+
+
     )
 else()
     if(ANDROID)
@@ -44,8 +52,8 @@ else()
     endif()
 endif()
 
-# Link Qt and OpenCV libraries
-target_link_libraries(code PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${OpenCV_LIBS})
+# Link Qt libraries
+target_link_libraries(code PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 # Set properties for bundle identifiers, macOS, and Windows specifics
 if(${QT_VERSION} VERSION_LESS 6.1.0)

@@ -1,0 +1,8 @@
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/out/build/x64-Debug/CMakeFiles/code.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/out/build/x64-Debug/CMakeFiles/list_install_components.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/out/build/x64-Debug/CMakeFiles/install.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/out/build/x64-Debug/CMakeFiles/install/local.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/out/build/x64-Debug/CMakeFiles/code_autogen_timestamp_deps.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/out/build/x64-Debug/CMakeFiles/code_autogen.dir

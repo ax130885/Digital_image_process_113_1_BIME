@@ -1,0 +1,9 @@
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/CMakeFiles/code.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/CMakeFiles/edit_cache.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/CMakeFiles/rebuild_cache.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/CMakeFiles/list_install_components.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/CMakeFiles/install.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/CMakeFiles/install/local.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/CMakeFiles/install/strip.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/CMakeFiles/code_autogen_timestamp_deps.dir
+C:/Users/USER/Desktop/Digital_image_process_113_1_BIME/01.hw/code/build/Desktop_Qt_6_7_2_MinGW_64_bit-Release/CMakeFiles/code_autogen.dir

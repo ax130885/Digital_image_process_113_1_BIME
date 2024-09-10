@@ -4,4 +4,4 @@ opencv安裝網址: https://opencv.org/releases/
 環境變數新增C:\opencv\build\x64\vc15\bin
 
 照著另一份提供txt檔案中的!!!!!!!!!!!!!!!!!!!!!!的部份
-修改CMakeLists.txt
+修改CMakeLists.txt (共有四處)
