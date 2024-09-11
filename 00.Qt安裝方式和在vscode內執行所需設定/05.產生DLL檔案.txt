@@ -8,8 +8,18 @@
 剛剛的資料夾可以看出使用的編譯器版本為"Qt_6_7_2_MinGW_64"
 在window搜尋找到Qt 6.7.2 (MinGW 11.2.0 64-bit)
 打開後cd至剛剛創建的資料夾
-輸入windeployqt.exe .\code.exe
+輸入windeployqt.exe .\code.exe # 產生qt相關模組的動態連結函式庫
 
 如果執行後一樣產生"無法找到程序輸入點"的錯誤
 代表建置版本與windeployqt.exe版本不一致
 一定要找到一樣的才行!
+
+
+接著產生編譯器相關的動態函式庫
+至"C:\Qt\Tools\mingw1120_64\bin"
+複製
+libgcc_s_seh-1.dll
+libstdc++-6.dll
+libwinpthread-1.dll
+至code.exe資料夾中
+cp -urp C:\Qt\Tools\mingw1120_64\bin\libgcc_s_seh-1.dll" C:\Qt\Tools\mingw1120_64\bin\libstdc++-6.dll" C:\Qt\Tools\mingw1120_64\bin\libwinpthread-1.dll" .
