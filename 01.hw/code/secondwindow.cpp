@@ -68,17 +68,43 @@ SecondWindow::SecondWindow(QWidget *parent) : QMainWindow(parent)
 
     // 創建加數輸入框 // 取得輸入的值 int addend = addend->text().toInt();
     QLineEdit *addend = new QLineEdit(this);
-    addend->setValidator(new QIntValidator(-255, 255, this));
-    addend->setPlaceholderText("輸入加數 (限+-255之間的整數)");
+    addend->setValidator(new QIntValidator(-31, 31, this));
+    addend->setPlaceholderText("輸入加數 (限+-31之間的整數)");
     addend->setFixedWidth(200);
     controlLayout->addWidget(addend);
 
+    // 連接 editingFinished 信號到槽函數 (如果輸入值超過上下限 自動修正為上下限)
+    connect(addend, &QLineEdit::textEdited, this, [addend]()
+            {
+        bool ok;
+        int value = addend->text().toInt(&ok);
+        if (ok) {
+            if (value < -31) {
+                addend->setText(QString::number(-31));
+            } else if (value > 31) {
+                addend->setText(QString::number(31));
+            }
+        } });
+
     // 創建乘數輸入框 // 取得輸入的值 int multiplierValue = multiplier->text().toInt();
     QLineEdit *multiplier = new QLineEdit(this);
-    multiplier->setValidator(new QDoubleValidator(-255.0, 255.0, 2, this));
-    multiplier->setPlaceholderText("輸入乘數 (限+-255之間的.2f浮點數)");
+    multiplier->setValidator(new QDoubleValidator(0.0, 31.0, 2, this));
+    multiplier->setPlaceholderText("輸入乘數 (限0.0~31.0之間.2f浮點數)");
     multiplier->setFixedWidth(200);
     controlLayout->addWidget(multiplier);
+
+    // 連接 editingFinished 信號到槽函數 (如果輸入值超過上下限 自動修正為上下限)
+    connect(multiplier, &QLineEdit::textEdited, this, [multiplier]()
+            {
+        bool ok;
+        double value = multiplier->text().toDouble(&ok);
+        if (ok) {
+            if (value < -31.0) {
+                multiplier->setText(QString::number(0.0, 'f', 2));
+            } else if (value > 31.0) {
+                multiplier->setText(QString::number(31.0, 'f', 2));
+            }
+        } });
 
     // 創建計算按鈕 (需產生一個新的影像)
     QPushButton *calculateButton = new QPushButton("Calculate for image1 (先乘後加)", this);

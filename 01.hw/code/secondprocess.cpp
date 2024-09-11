@@ -113,7 +113,7 @@ int SecondProcess::p_loadImage(QString image1FileName, QString image2FileName)
 void SecondProcess::p_calculateImage(int addend, double multiplier)
 {
     // 計算影像的加法和乘法
-    // 最後記得檢查數值會不會超過 255 或是小於 0
+    // 最後記得檢查數值會不會超過 31 或是小於 0
     for (int i = 0; i < imageArray1.size(); i++)
     {
         for (int j = 0; j < imageArray1[i].size(); j++)
@@ -122,11 +122,11 @@ void SecondProcess::p_calculateImage(int addend, double multiplier)
             imageArrayAns[i][j] = static_cast<int>(std::round(imageArray1[i][j] * multiplier));
             imageArrayAns[i][j] = imageArrayAns[i][j] + addend;
 
-            // 將結果限制在 [0, 255] 範圍內
+            // 將結果限制在 [0, 31] 範圍內
             if (imageArrayAns[i][j] < 0)
                 imageArrayAns[i][j] = 0;
-            if (imageArrayAns[i][j] > 255)
-                imageArrayAns[i][j] = 255;
+            if (imageArrayAns[i][j] > 31)
+                imageArrayAns[i][j] = 31;
         }
     }
     displayGrayImage();
@@ -179,11 +179,11 @@ void SecondProcess::p_gxImage()
                 imageArrayAns[i][j] = imageArray1[i][j]; // i == 0 時，僅使用 imageArray1
             }
 
-            // 將結果限制在 [0, 255] 範圍內
+            // 將結果限制在 [0, 31] 範圍內
             if (imageArrayAns[i][j] < 0)
                 imageArrayAns[i][j] = 0;
-            if (imageArrayAns[i][j] > 255)
-                imageArrayAns[i][j] = 255;
+            if (imageArrayAns[i][j] > 31)
+                imageArrayAns[i][j] = 31;
         }
     }
 
@@ -255,7 +255,7 @@ void SecondProcess::displayGrayImage()
         {
             for (int col = 0; col < 64; col++)
             {
-                int value = imageArray1[row][col];                          // 從 imageArray 取得值
+                int value = imageArray1[row][col] * 4;                      // 從 imageArray 取得值
                 displayImage.setPixel(col, row, qRgb(value, value, value)); // 設置為灰階顏色
             }
         }
@@ -283,7 +283,7 @@ void SecondProcess::displayGrayImage()
         {
             for (int col = 0; col < 64; col++)
             {
-                int value = imageArray2[row][col];                          // 從 imageArray 取得值
+                int value = imageArray2[row][col] * 4;                      // 從 imageArray 取得值
                 displayImage.setPixel(col, row, qRgb(value, value, value)); // 設置為灰階顏色
             }
         }
@@ -311,7 +311,7 @@ void SecondProcess::displayGrayImage()
         {
             for (int col = 0; col < 64; col++)
             {
-                int value = imageArrayAns[row][col];                        // 從 imageArray 取得值
+                int value = imageArrayAns[row][col] * 4;                    // 從 imageArray 取得值
                 displayImage.setPixel(col, row, qRgb(value, value, value)); // 設置為灰階顏色
             }
         }
@@ -333,7 +333,7 @@ void SecondProcess::displayHistogram()
 {
     QPainter painter(this);
 
-    QVector<int> histogram(255, 0);
+    QVector<int> histogram(32, 0);
 
     for (int row = 0; row < 64; row++)
     {
@@ -344,23 +344,23 @@ void SecondProcess::displayHistogram()
         }
     }
 
-    int barWidth = 3;       // 條形寬度
-    int xOffset = 400;      // x 軸起始位置
-    int yOffset = 550;      // y 軸起始位置
-    int maxHeight = 500;    // 最大高度
-    int labelInterval = 20; // 標籤間隔，交錯顯示
+    int barWidth = 22;     // 條形寬度
+    int xOffset = 400;     // x 軸起始位置
+    int yOffset = 550;     // y 軸起始位置
+    int maxHeight = 500;   // 最大高度
+    int labelInterval = 1; // 標籤間隔，交錯顯示
 
     // 計算最大數值
     int maxCount = *std::max_element(histogram.begin(), histogram.end());
 
     // 繪製 x 軸
-    painter.drawLine(xOffset, yOffset, xOffset + 255 * barWidth, yOffset);
+    painter.drawLine(xOffset, yOffset, xOffset + 32 * barWidth, yOffset);
 
     // 繪製 y 軸
     painter.drawLine(xOffset, yOffset, xOffset, yOffset - maxHeight);
 
     // 繪製直方圖條形
-    for (int i = 0; i < 255; i++) // 只顯示到 255
+    for (int i = 0; i < 32; i++) // 只顯示到 32
     {
         int barHeight = static_cast<int>((static_cast<double>(histogram[i]) / maxCount) * maxHeight);
         int x = xOffset + i * barWidth;

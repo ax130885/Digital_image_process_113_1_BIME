@@ -8,7 +8,7 @@ Designing a function in your program to display the image on the screen is encou
 <br/>
 
 ## 【解釋算法】
-以paintevent實作 計算、繪製、直方圖:
+繪製直方圖:
 
 ```c++
 void ImageProcessor::generateHistogram()
@@ -25,15 +25,6 @@ void ImageProcessor::generateHistogram()
             count++;
         }
     }
-
-    printf("total count = %d\n", count);
-    int sum = 0;
-    for (int i = 0; i < 32; i++)
-    {
-        qDebug() << "value: " << i << ", count: " << histogram[i];
-        sum += histogram[i];
-    }
-    printf("sum = %d\n", sum);
 }
 
 void ImageProcessor::paintEvent(QPaintEvent *event) // 繪製事件 使用update()函數時自動觸發
@@ -109,13 +100,13 @@ void ImageProcessor::displayGrayImage()
     {
         for (int col = 0; col < 64; col++)
         {
-            int value = imageArray[row][col];                    // 從 imageArray 取得值
+            int value = imageArray[row][col] * 4;                // 從 imageArray 取得值
             image.setPixel(col, row, qRgb(value, value, value)); // 設置為灰階顏色
         }
     }
 
-    // 將影像儲存到檔案
-    image.save("gray_image.png");
+    // // 將影像儲存到檔案
+    // image.save("gray_image.png");
 
     // 更新窗口以顯示影像
     QPixmap pixmap = QPixmap::fromImage(image);
@@ -127,16 +118,16 @@ void ImageProcessor::displayGrayImage()
 ```
 
 ## 【結果圖片】
-| ![LISA.64直方圖與灰階圖](readme_figure/image.png) | ![JET.64直方圖與灰階圖](readme_figure/image-3.png) |
-| :-----------------------------------------------: | :------------------------------------------------: |
-|               LISA.64直方圖與灰階圖               |                JET.64直方圖與灰階圖                |
+| ![alt text](readme_figure/image-1.png) | ![alt text](readme_figure/image-4.png) |
+| :------------------------------------: | :------------------------------------: |
+|         LISA.64直方圖與灰階圖          |          JET.64直方圖與灰階圖          |
 
-| ![LINCOLN.64直方圖與灰階圖](readme_figure/image-1.png) | ![LIBERTY.64直方圖與灰階](readme_figure/image-2.png) |
-| :----------------------------------------------------: | :--------------------------------------------------: |
-|                LINCOLN.64直方圖與灰階圖                |                LIBERTY.64直方圖與灰階                |
+| ![alt text](readme_figure/image-2.png) | ![alt text](readme_figure/image-3.png) |
+| :------------------------------------: | :------------------------------------: |
+|        LINCOLN.64直方圖與灰階圖        |         LIBERTY.64直方圖與灰階         |
 
 ## 【結果討論】
-這次作業我使用Qt/C++，並且全程沒有使用圖形介面輔助。在一開始建置環境時遇到許多問題，包含如何將openCV導入到Qt當中、如何在vscode當中直接編譯執行而不需要Qt creator。接下來找學習資源的過程也是一波三折。我查詢到的資源似乎都是詳細的從頭教到尾，沒有快速建立一個簡單範本，讓我能夠快速應用在作業上的教學。因此從頭開始學習花費許多時間。最後只能簡單先看前面幾集，再邊查邊學。
+我設計了四個按鈕分別為:選擇預設圖片清單、載入影像、清除直方圖、上傳其他檔案。當選擇清單以後需要點選載入影像才會顯示灰階圖和直方圖。
 
 # Part 2. Arithmetic Operations of an Image Array
 Design a software program that will perform the basic tasks of arithmetic operations on an image or two images.    
@@ -172,8 +163,6 @@ void SecondProcess::p_calculateImage(int addend, double multiplier)
                 imageArrayAns[i][j] = 255;
         }
     }
-    displayGrayImage();
-    update(); // 強制重繪
 }
 ```
 
@@ -199,9 +188,6 @@ void SecondProcess::p_averageImage()
             imageArrayAns[i][j] = (imageArray1[i][j] + imageArray2[i][j]) / 2;
         }
     }
-
-    displayGrayImage();
-    update(); // 強制重繪
 }
 ```
 
@@ -239,28 +225,36 @@ void SecondProcess::p_gxImage()
                 imageArrayAns[i][j] = 255;
         }
     }
-
-    displayGrayImage();
-    update(); // 強制重繪
 }
 ```
 
 ## 【結果圖片】
-![alt text](readme_figure/image-4.png)
-<p align="center">最下方圖為最上方圖*5+10後的結果</p>
+<p align="center">    <img src="readme_figure/image.png" alt="alt text" width="300" height="200"></p>
+<p align="center">題目選單</p>
 </br>
 
-![alt text](readme_figure/image-5.png)
-<p align="center">最下方圖為兩圖平均的結果</p>
-</br>
+#### 【線性運算】
+| ![alt text](readme_figure/image-5.png) | ![alt text](readme_figure/image-6.png) |
+| :------------------------------------: | :------------------------------------: |
+|             LISA * 0.5 + 0             |            LISA * 0.5 + 16             |
+| ![alt text](readme_figure/image-7.png) | ![alt text](readme_figure/image-8.png) |
+|             JET * 1.2 + 0              |             LISA * 1.8 + 0             |
 
-![alt text](readme_figure/image-6.png)
-<p align="center">最下方圖為g(x,y) = f1(x,y) - f2(x-1,y)的結果</p>
-</br>
+#### 【平均圖片】
+| ![alt text](readme_figure/image-9.png) | ![alt text](readme_figure/image-10.png) |
+| :------------------------------------: | :-------------------------------------: |
+|           avg(LISA, LINCOLN)           |            avg(LIBERTY, JET)            |
+
+#### 【$g(x,y)=f1(x,y)-f2(x-1,y)$】
+| ![alt text](readme_figure/image-11.png) | ![alt text](readme_figure/image-12.png) |
+| :-------------------------------------: | :-------------------------------------: |
+|           g(LINCOLN, LINCOLN)           |            g(LIBERTY, LISA)             |
 
 ## 【結果討論】
-由於第一小題還在邊做邊學的過程，程式架構設計的不太好，擴充性不佳，不容易直接改成適應兩個輸入圖片的版面。因此第二個作業我把大部分的程式碼又重寫了一次，但感覺還是能做得更好，例如讓class的功能更細化，分出更多個widget方便版面編排等。
-
-另外在讀取文件的時候發現一個問題，花費我許多時間才解決。即.64文件儲存的換行不是\n而是\r\n，導致每當文件讀到最後就會報錯(因為\r不是32進制字元)。
-
-還有因為我的電腦中有許多gcc編譯器，因此導致無法直接使用winployqt.exe產生相應的dll檔，也不能直接從Qt資料夾中複製所需的dll檔。而是需要直接開啟對應版本的mingw，再執行winployqt才可以產生正確的動態函式庫。最後還需要至系統環境變數，將對應版本的gcc拉到最上面，才能正確執行檔案。
+1. 線性運算:   
+   加法運算相當於調整影像亮度、乘法運算相當於調整影像對比度。  
+2. 平均圖片:   
+   平均圖片相當於將兩張所選圖片/2以後相加，因此可以看到兩張圖片被刷淡後的輪廓。  
+3. f1(x,y)-f2(x-1,y):   
+   因為兩張圖片僅差在x差了一格pixel，因此如果選擇同張圖片相減，顯示的圖片會近似於x方向邊緣檢測的效果。  
+   如果選擇不同圖片的話，f2會產生有點像是負片的效果。  

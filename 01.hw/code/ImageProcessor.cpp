@@ -109,14 +109,14 @@ void ImageProcessor::generateHistogram()
         }
     }
 
-    printf("total count = %d\n", count);
-    int sum = 0;
-    for (int i = 0; i < 32; i++)
-    {
-        qDebug() << "value: " << i << ", count: " << histogram[i];
-        sum += histogram[i];
-    }
-    printf("sum = %d\n", sum);
+    // printf("total count = %d\n", count);
+    // int sum = 0;
+    // for (int i = 0; i < 32; i++)
+    // {
+    //     qDebug() << "value: " << i << ", count: " << histogram[i];
+    //     sum += histogram[i];
+    // }
+    // printf("sum = %d\n", sum);
 }
 
 void ImageProcessor::paintEvent(QPaintEvent *event) // 繪製事件 使用update()函數時自動觸發
@@ -133,7 +133,7 @@ void ImageProcessor::drawHistogram(QPainter &painter)
     int xOffset = 50;      // x 軸起始位置
     int yOffset = 550;     // y 軸起始位置
     int maxHeight = 500;   // 最大高度
-    int labelInterval = 5; // 標籤間隔，交錯顯示
+    int labelInterval = 1; // 標籤間隔，交錯顯示
 
     // 計算最大數值
     int maxCount = *std::max_element(histogram.begin(), histogram.end());
@@ -188,13 +188,13 @@ void ImageProcessor::displayGrayImage()
     {
         for (int col = 0; col < 64; col++)
         {
-            int value = imageArray[row][col];                    // 從 imageArray 取得值
+            int value = imageArray[row][col] * 4;                // 從 imageArray 取得值
             image.setPixel(col, row, qRgb(value, value, value)); // 設置為灰階顏色
         }
     }
 
     // 將影像儲存到檔案
-    image.save("gray_image.png");
+    // image.save("gray_image.png");
 
     // 更新窗口以顯示影像
     QPixmap pixmap = QPixmap::fromImage(image);
