@@ -8,28 +8,57 @@ id: R12631070
 Solve the problems 2.12, 2.16, 2.18, 2.37, 3.12, 3.18 in the textbook.  
 
 ### 【2.12】
-**Q:** Suppose that a flat area with center at $(x_0, y_0) $ is illuminated by a light source with intensity distribution  
+**Q:** Suppose that a flat area with center at $(x_0, y_0)$ is illuminated by a light source with intensity distribution  
 $$
 i(x, y) = K e^{-[(x - x_0) + (y - y_0)]}
 $$
-Assume for simplicity that the reflectance of the area is constant and equal to 1.0, and letK = 255. If the intensity of the resulting image is quantized using k bits, and the eye can detect an abrupt change of eight intensity levels between adjacent pixels, what is the highest value of k that will cause visible false contouring?  
+Assume for simplicity that the reflectance of the area is constant and equal to 1.0, and let $K = 255$. If the intensity of the resulting image is quantized using k bits, and the eye can detect an abrupt change of eight intensity levels between adjacent pixels, what is the highest value of k that will cause visible false contouring?  
 
-**A:** 
+**A:** $0 \sim 255$ 相當於$2^8=256$，也就是說一個像素的灰階值可以用 8 bits 表示。此外題目敘述當鄰近像素強度變化達到 8 時眼睛才有辦法觀測。$log_{2}(256/8) = log_{2}(32) = 5$，因此當$k = 5$時就可以觀察到假輪廓。
  
 
 
 ### 【2.16】
 **Q:** Develop an algorithm for converting a one-pixelthick m-path to a 4-path.  
 
-**A:** 
+**A:**   
+4-path: 僅能上下左右移動(不可對角線)  
+m-path: 可以上下左右+對角線移動  
+```python
+def convert_mpath_to_4path(m_path):
+    # 初始化結果的 4-path
+    four_path = []
+    
+    # 將起點添加到 4-path 中
+    four_path.append(m_path[0])
+    
+    # 遍歷路徑中的每對相鄰點
+    for i in range(1, len(m_path)):
+        x_i, y_i = m_path[i - 1]
+        x_next, y_next = m_path[i]
+        
+        # 如果是4-連通，直接添加到結果中
+        if abs(x_next - x_i) + abs(y_next - y_i) == 1:
+            four_path.append((x_next, y_next))
+        else:
+            # 處理對角連接，插入水平或垂直移動
+            four_path.append((x_next, y_i))     # 先水平移動
+            four_path.append((x_next, y_next))  # 後垂直移動
+    
+    return four_path
+
+# 測試範例
+m_path = [(1, 1), (2, 2), (3, 2), (4, 3)]
+four_path = convert_mpath_to_4path(m_path)
+print(four_path)
+```
 
 
 
 ### 【2.18】
-**Q:**  Consider the image segment shown in the figure
-that follows.
-**(a)** * As in Section 2.5, let V = { , 0 1} be the set
-of intensity values used to define adjacency. Compute the lengths of the shortest 4-, 8-, and m-path between p and q in the following image. If a particular path does not exist between these two points, explain why.
+**Q:**  Consider the image segment shown in the figure that follows.  
+**(a)** * As in Section 2.5, let $V = {0,1}$ be the set
+of intensity values used to define adjacency. Compute the lengths of the shortest 4-, 8-, and m-path between $p$ and $q$ in the following image. If a particular path does not exist between these two points, explain why.
 
 $$
 \begin{bmatrix}
@@ -40,7 +69,7 @@ $$
 \end{bmatrix}
 $$
 
-**(b)** Repeat (a) but using V = [1, 2].
+**(b)** Repeat (a) but using $V = [1, 2]$.
 
 **A:** 
 
@@ -51,39 +80,74 @@ $$
 
 $$
 \begin{bmatrix}
-x_1 & y_1 \\
-x_2 & y_2 \\
-x_3 & y_3 \\
+    x' \\
+    y' \\
+    1 \\
+\end{bmatrix}
+=A
+\begin{bmatrix}
+  x \\
+  y \\
+  1 \\  
 \end{bmatrix}
 =
 \begin{bmatrix}
-a_{11} & a_{12} & a_{13} \\
+    a_{11} & a_{12} & a_{13} \\
 a_{21} & a_{22} & a_{23} \\
-a_{31} & a_{32} & a_{33} \\
+0 & 0 & 1
 \end{bmatrix}
 \begin{bmatrix}
-1 \\
-2 \\
-3 \\
+  x \\
+  y \\
+  1 \\  
 \end{bmatrix}
 $$
 
+where $(x',y')$ are the transformed coordinates, $(x,y)$ are the original coordinates, and the elements of $A$ are given in Table 2.3 for various types of transformations. The inverse transformation, $A^{−1}$ , to go from the transformed back to the original coordinates is just as important for performing inverse mappings.
 
-
+**(a)** * Find the inverse scaling transformation.  
+**(b)** Find the inverse translation transformation.  
+**(c)** Find the inverse vertical and horizontal shearing transformations.  
+**(d)** * Find the inverse rotation transformation.  
+**(e)** * Show a composite inverse translation/rotation transformation.  
 
 **A:** 
 
 
 
 ### 【3.12】
-**Q:** 
+**Q:** An image with intensities in the range $[0,1]$ has the PDF, $p_r(r)$, shown in the following figure. It is desired to transform the intensity levels of this image so that they will have the specified $p_z(z)$ shown in the figure. Assume continuous quantities, and find the transformation (expressed in terms of $r$ and $z$) that will accomplish this.  
+<p align="center">
+    <img src="image.png" alt="alt text">
+</p>
 
 **A:** 
 
 
 
 ### 【3.18】
-**Q:** 
+**Q:** You are given the following kernel and image:
+$$
+w = 
+\begin{bmatrix}
+    1 & 2 & 1 \\
+    2 & 4 & 2 \\
+    1 & 2 & 1 \\
+\end{bmatrix}
+\quad \quad \quad \quad
+f = 
+\begin{bmatrix}
+    0 & 0 & 0 & 0 & 0 \\
+    0 & 0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 & 0 \\
+    0 & 0 & 0 & 0 & 0 \\
+\end{bmatrix}
+$$
+
+**(a)** * Give a sketch of the area encircled by the large ellipse in Fig. 3.28 when the kernel is centered at point $(2,3)$ (2nd row, 3rd col) of the image shown above. Show specific values of $w$ and $f$.  
+**(b)** * Compute the convolution $w$ ☆ $f$ using theminimum zero padding needed. Show the details of your computations when the kernel is centered on point $(2,3)$ of $f$; and then show the final full convolution result.  
+**(c)** Repeat (b), but for correlation, $w$ ★ $f$ .
 
 **A:** 
 
@@ -101,131 +165,36 @@ $$
 
 
 # Part 2. Arithmetic Operations of an Image Array
-Design a software program that will perform the basic tasks of arithmetic operations on an image or two images.    
-Use the .64 image for this program.  
-The assigned image processing operations are as follows:  
-1. Add or subtract a constant value to each pixel in the image.
-2. Multiply a constant to each pixel in the image.
-3. Create a new image which is the average image of two input images.
-4. Create a new image g(x,y) in which the value of each pixel is determined by calculating the pixel values of the input image f(x,y) using the following equation: 
-   $$ g(x,y) = f1(x,y) - f2(x-1,y) $$
+Design a software program that can achieve the following image processing operations:  
+1. Read a color BMP or JPEG image file and display it on the screen. You may use the functions provided by Qt, OpenCV, or MATLAB to read and display an image file. (10%)  
+<br/>
+2. Convert a color image into a grayscale image using the following equations:  
+    $$
+    \text{GRAY} = \frac{R + G + B}{3}
+    $$
+    $$
+    \text{GRAY} = 0.299 \times R + 0.587 \times G + 0.114 \times B
+    $$
+    Compare the grayscale images obtained from the above equations. One way to compare the difference between two images is by image subtraction (5%)  
+<br/>
+3. Determine and display the histogram of a grayscale image. (10%)  
+<br/>
+5. Implement a manual threshold function to convert a grayscale image into a binary image. (10%)  
+<br/>
+6. Implement a function to adjust the spatial resolution (enlarge or shrink) and grayscale levels of an image. Use an interpolation method on enlarging an image. (10%)  
+<br/>
+7. Implement a function to adjust the brightness and constrast of an image. (10%)  
+<br/>
+8. Implement a histogram equalization function for automatic constrast adjustment. (15%)  
+<br/>
+
+Test your image processing functions with various images and compare the processed image with those processed with Photoshop, PhotoImpact, or other similar commercial image processing software.
+
+Write a report to describe and discuss your image processing program. You are encouraged to design a graphical user-friendly interface for your program containing the designated functions.
 <!-- <br/> -->
 
 ## 【解釋算法】
-線性運算:
-
-c++
-void SecondProcess::p_calculateImage(int addend, double multiplier)
-{
-    // 計算影像的加法和乘法
-    // 最後記得檢查數值會不會超過 255 或是小於 0
-    for (int i = 0; i < imageArray1.size(); i++)
-    {
-        for (int j = 0; j < imageArray1[i].size(); j++)
-        {
-            // 先乘後加
-            imageArrayAns[i][j] = static_cast<int>(std::round(imageArray1[i][j] * multiplier));
-            imageArrayAns[i][j] = imageArrayAns[i][j] + addend;
-
-            // 將結果限制在 [0, 255] 範圍內
-            if (imageArrayAns[i][j] < 0)
-                imageArrayAns[i][j] = 0;
-            if (imageArrayAns[i][j] > 255)
-                imageArrayAns[i][j] = 255;
-        }
-    }
-}
-
-
-</br>
-平均兩圖:
-
-c++
-void SecondProcess::p_averageImage()
-{
-    // 檢查一定要載入兩個影像
-    if (image2Path == "None")
-    {
-        QMessageBox::critical(this, "Error", "Please load image2 first");
-        return;
-    }
-
-    // 計算兩個影像的平均值
-    // 這裡只是一個示例，實際上需要根據您的需求來實現
-    for (int i = 0; i < imageArray1.size(); i++)
-    {
-        for (int j = 0; j < imageArray1[i].size(); j++)
-        {
-            imageArrayAns[i][j] = (imageArray1[i][j] + imageArray2[i][j]) / 2;
-        }
-    }
-}
-
-
-</br>
-g(x,y) = f1(x,y) - f2(x-1,y):
-
-c++
-void SecondProcess::p_gxImage()
-{
-    // 檢查一定要載入兩個影像
-    if (image2Path == "None")
-    {
-        QMessageBox::critical(this, "Error", "Please load image2 first");
-        return;
-    }
-
-    // 計算兩個影像的 g(x,y)=f1(x,y)-f2(x-1,y)
-    for (int i = 0; i < imageArray1.size(); i++)
-    {
-        for (int j = 0; j < imageArray1[i].size(); j++)
-        {
-            if (i > 0) // 避免 i - 1 為負數
-            {
-                imageArrayAns[i][j] = imageArray1[i][j] - imageArray2[i - 1][j];
-            }
-            else
-            {
-                imageArrayAns[i][j] = imageArray1[i][j]; // i == 0 時，僅使用 imageArray1
-            }
-
-            // 將結果限制在 [0, 255] 範圍內
-            if (imageArrayAns[i][j] < 0)
-                imageArrayAns[i][j] = 0;
-            if (imageArrayAns[i][j] > 255)
-                imageArrayAns[i][j] = 255;
-        }
-    }
-}
-
 
 ## 【結果圖片】
-<p align="center">    <img src="readme_figure/image.png" alt="alt text" width="300" height="200"></p>
-<p align="center">題目選單</p>
-</br>
-
-#### 【線性運算】
-| ![alt text](readme_figure/image-5.png) | ![alt text](readme_figure/image-6.png) |
-| :------------------------------------: | :------------------------------------: |
-|             LISA * 0.5 + 0             |            LISA * 0.5 + 16             |
-| ![alt text](readme_figure/image-7.png) | ![alt text](readme_figure/image-8.png) |
-|             JET * 1.2 + 0              |             LISA * 1.8 + 0             |
-
-#### 【平均圖片】
-| ![alt text](readme_figure/image-9.png) | ![alt text](readme_figure/image-10.png) |
-| :------------------------------------: | :-------------------------------------: |
-|           avg(LISA, LINCOLN)           |            avg(LIBERTY, JET)            |
-
-#### 【$g(x,y)=f1(x,y)-f2(x-1,y)$】
-| ![alt text](readme_figure/image-11.png) | ![alt text](readme_figure/image-12.png) |
-| :-------------------------------------: | :-------------------------------------: |
-|           g(LINCOLN, LINCOLN)           |            g(LIBERTY, LISA)             |
 
 ## 【結果討論】
-1. 線性運算:   
-   加法運算相當於調整影像亮度、乘法運算相當於調整影像對比度。  
-2. 平均圖片:   
-   平均圖片相當於將兩張所選圖片/2以後相加，因此可以看到兩張圖片被刷淡後的輪廓。  
-3. f1(x,y)-f2(x-1,y):   
-   因為兩張圖片僅差在x差了一格pixel，因此如果選擇同張圖片相減，顯示的圖片會近似於x方向邊緣檢測的效果。  
-   如果選擇不同圖片的話，f2會產生有點像是負片的效果。  
