@@ -1,3 +1,8 @@
 https://www.qt.io/download-open-source
 
 密碼記得要一個大寫
+
+下載時記得要把MSVC打勾 (因為OPENCV 僅提供MSVC的DLL 沒有MinGW的DLL 需要自己用cmake編譯)
+忘記的話 可以在 Qt creator 工具列 > 工具 > Qt Maintenance Tool > Star Maintenance Tool 重載
+
+Visual Studio 也要去 工具列 > 工具 > 取得工具與功能 > 使用C++的桌面開發 > 下載MSVC
