@@ -1,5 +1,6 @@
 先在qt creator當中編譯過
 
+【使用MinGW C++編譯器】
 根據自己建置的版本進入build資料夾
 "C:\Users\USER\Desktop\Digital_image_process_113_1_BIME\01.hw\code\build\Desktop_Qt_6_7_2_MinGW_64_bit-MinSizeRel"
 
@@ -15,6 +16,7 @@
 一定要找到一樣的才行!
 
 
+【使用MinGW才要】
 接著產生編譯器相關的動態函式庫
 至"C:\Qt\Tools\mingw1120_64\bin"
 複製
@@ -23,3 +25,22 @@ libstdc++-6.dll
 libwinpthread-1.dll
 至code.exe資料夾中
 cp -urp C:\Qt\Tools\mingw1120_64\bin\libgcc_s_seh-1.dll" C:\Qt\Tools\mingw1120_64\bin\libstdc++-6.dll" C:\Qt\Tools\mingw1120_64\bin\libwinpthread-1.dll" .
+
+
+
+【使用MSVC C++編譯器】
+根據自己建置的版本進入build資料夾
+"C:\Users\user\Desktop\Digital_image_process_113_1_BIME\02.hw\code\build\Desktop_Qt_6_7_2_MSVC2019_64bit-Release\release"
+
+將exe檔案複製至單獨資料夾 (建議在桌面新增一個資料夾 方便下一步)
+
+剛剛的資料夾可以看出使用的編譯器版本為"Qt 6.7.2 (MSVC 2019 64-bit)"
+在window搜尋找到Qt 6.7.2 (MSVC 2019 64-bit)
+打開後cd至剛剛創建的資料夾
+輸入windeployqt.exe .\code.exe # 產生qt相關模組的動態連結函式庫
+如果跳找不到Visual Studio 路徑相關的warning 可以直接使用Visual Studio 的開發者命令提示符 (Developer Command Prompt for VS)
+同樣進入code.exe所在資料夾 輸入windeployqt.exe .\code.exe
+
+如果執行後一樣產生"無法找到程序輸入點"的錯誤
+代表建置版本與windeployqt.exe版本不一致
+一定要找到一樣的才行!
