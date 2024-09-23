@@ -183,9 +183,9 @@ Design a software program that can achieve the following image processing operat
 <br/>
 6. Implement a function to adjust the spatial resolution (enlarge or shrink) and grayscale levels of an image. Use an interpolation method on enlarging an image. (10%)  
 <br/>
-7. Implement a function to adjust the brightness and constrast of an image. (10%)  
+7. Implement a function to adjust the brightness and contrast of an image. (10%)  
 <br/>
-8. Implement a histogram equalization function for automatic constrast adjustment. (15%)  
+8. Implement a histogram equalization function for automatic contrast adjustment. (15%)  
 <br/>
 
 Test your image processing functions with various images and compare the processed image with those processed with Photoshop, PhotoImpact, or other similar commercial image processing software.
