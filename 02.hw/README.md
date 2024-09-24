@@ -154,16 +154,6 @@ $$
 
 <br/>
 
-## 【解釋算法】
-
-
-
-## 【結果圖片】
-
-
-## 【結果討論】
-
-
 # Part 2. Arithmetic Operations of an Image Array
 Design a software program that can achieve the following image processing operations:  
 1. Read a color BMP or JPEG image file and display it on the screen. You may use the functions provided by Qt, OpenCV, or MATLAB to read and display an image file. (10%)  
@@ -194,7 +184,11 @@ Write a report to describe and discuss your image processing program. You are en
 <!-- <br/> -->
 
 ## 【解釋算法】
+放程式碼
 
 ## 【結果圖片】
+放圖片
+![alt text](image-1.png)
 
 ## 【結果討論】
+討論
