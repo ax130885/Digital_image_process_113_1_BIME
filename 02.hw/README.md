@@ -118,7 +118,7 @@ where $(x',y')$ are the transformed coordinates, $(x,y)$ are the original coordi
 ### 【3.12】
 **Q:** An image with intensities in the range $[0,1]$ has the PDF, $p_r(r)$, shown in the following figure. It is desired to transform the intensity levels of this image so that they will have the specified $p_z(z)$ shown in the figure. Assume continuous quantities, and find the transformation (expressed in terms of $r$ and $z$) that will accomplish this.  
 <p align="center">
-    <img src="image.png" alt="alt text">
+    <img src="readme_figure/image.png" alt="alt text">
 </p>
 
 **A:** 
@@ -184,11 +184,43 @@ Write a report to describe and discuss your image processing program. You are en
 <!-- <br/> -->
 
 ## 【解釋算法】
-放程式碼
+### 灰階
+#### G1 = (R+G+B)/3
+#### G2 = 0.299*R + 0.587*G + 0.114*B
+#### diff(G1, G2)
+
+### 二值化
+
+### 縮放
+
+### 量化
+
+### 亮度調整
+
+### 對比調整
+
+### 直方圖均衡化
 
 ## 【結果圖片】
-放圖片
-![alt text](image-1.png)
+放圖片  
+
+
+![alt text](readme_figure/image-1.png)
 
 ## 【結果討論】
-討論
+### 灰階
+#### G1 = (R+G+B)/3
+#### G2 = 0.299*R + 0.587*G + 0.114*B
+#### diff(G1, G2)
+
+### 二值化
+
+### 縮放
+
+### 量化
+
+### 亮度調整
+
+### 對比調整
+
+### 直方圖均衡化
