@@ -45,12 +45,12 @@ std::unique_ptr<QImage> GeneralProcess::calculateGrayHistogram(std::unique_ptr<Q
     int width = image->width();
     int height = image->height();
 
-    // 遍歷每個像素，計算灰度直方圖
+    // 遍歷每個像素，計算灰階直方圖
     for (int y = 0; y < height; ++y)
     {
         for (int x = 0; x < width; ++x)
         {
-            // 獲取像素的灰度值
+            // 獲取像素的灰階值
             int gray = qGray(image->pixel(x, y));
             // 更新直方圖
             ++histogram[gray];
@@ -140,6 +140,7 @@ std::unique_ptr<QImage> GeneralProcess::calculateRGBHistogram(std::unique_ptr<QI
     return histogramImage; // 返回直方圖圖像
 }
 
+// 二值化
 std::unique_ptr<QImage> GeneralProcess::binaryzation(std::unique_ptr<QImage> &image, int *threshold_rgb)
 {
     // 獲取圖片的寬度和高度
@@ -154,13 +155,13 @@ std::unique_ptr<QImage> GeneralProcess::binaryzation(std::unique_ptr<QImage> &im
     {
         for (int x = 0; x < width; ++x)
         {
-            // 獲取像素的灰度值
+            // 獲取像素的灰階值
             int gray = qGray(image->pixel(x, y));
 
             // 二值化處理
             int binary = (gray > *threshold_rgb) ? 255 : 0;
 
-            // 將二值化結果設置為新像素的灰度值
+            // 將二值化結果設置為新像素的灰階值
             binaryImage->setPixel(x, y, qRgb(binary, binary, binary));
         }
     }
@@ -168,6 +169,7 @@ std::unique_ptr<QImage> GeneralProcess::binaryzation(std::unique_ptr<QImage> &im
     return binaryImage; // 返回二值化圖像
 }
 
+// 雙線性插值法
 std::unique_ptr<QImage> GeneralProcess::scaleImageBilinear(std::unique_ptr<QImage> &image, const int *newWidth, const int *newHeight)
 {
     // 創建一個新的 QImage 來存儲縮放後的圖像
@@ -232,7 +234,7 @@ std::unique_ptr<QImage> GeneralProcess::scaleImageBilinear(std::unique_ptr<QImag
     return scaledImage;
 }
 
-// 最近鄰插值法實現
+// 最近鄰插值法
 std::unique_ptr<QImage> GeneralProcess::scaleImageNearestNeighbor(std::unique_ptr<QImage> &image, const int *newWidth, const int *newHeight)
 {
     // 創建一個新的 QImage 來存儲縮放後的圖像
@@ -272,6 +274,7 @@ std::unique_ptr<QImage> GeneralProcess::scaleImageNearestNeighbor(std::unique_pt
     return scaledImage;
 }
 
+// 量化
 std::unique_ptr<QImage> GeneralProcess::quantization(std::unique_ptr<QImage> &image, int *bits)
 {
     // 獲取圖片的寬度和高度
@@ -305,6 +308,7 @@ std::unique_ptr<QImage> GeneralProcess::quantization(std::unique_ptr<QImage> &im
     return quantizedImage; // 返回量化圖像
 }
 
+// 調整亮度
 std::unique_ptr<QImage> GeneralProcess::adjustBrightness(std::unique_ptr<QImage> &image, int *brightness)
 {
     // 獲取圖片的寬度和高度
@@ -338,6 +342,7 @@ std::unique_ptr<QImage> GeneralProcess::adjustBrightness(std::unique_ptr<QImage>
     return adjustedImage; // 返回調整亮度後的圖像
 }
 
+// 調整對比度
 std::unique_ptr<QImage> GeneralProcess::adjustContrast(std::unique_ptr<QImage> &image, float *contrast)
 {
     // 獲取圖片的寬度和高度
@@ -371,6 +376,7 @@ std::unique_ptr<QImage> GeneralProcess::adjustContrast(std::unique_ptr<QImage> &
     return adjustedImage; // 返回調整對比度後的圖像
 }
 
+// 灰階直方圖均衡化
 std::unique_ptr<QImage> GeneralProcess::equalizeHistogramGrayImage(std::unique_ptr<QImage> &image)
 {
     if (!image)
@@ -386,7 +392,7 @@ std::unique_ptr<QImage> GeneralProcess::equalizeHistogramGrayImage(std::unique_p
     // 初始化直方圖為 0
     std::vector<int> histogram(256, 0);
 
-    // 計算灰度直方圖
+    // 計算灰階直方圖
     for (int y = 0; y < height; ++y)
     {
         for (int x = 0; x < width; ++x)
@@ -396,7 +402,7 @@ std::unique_ptr<QImage> GeneralProcess::equalizeHistogramGrayImage(std::unique_p
         }
     }
 
-    // 計算累積直方圖
+    // 計算累積直方圖(CDF)
     std::vector<int> cumulativeHistogram(256, 0);
     cumulativeHistogram[0] = histogram[0];
     for (int i = 1; i < 256; ++i)
@@ -404,7 +410,7 @@ std::unique_ptr<QImage> GeneralProcess::equalizeHistogramGrayImage(std::unique_p
         cumulativeHistogram[i] = cumulativeHistogram[i - 1] + histogram[i];
     }
 
-    // 計算均衡化後的灰度值
+    // 計算均衡化後的灰階值
     int totalPixels = width * height;
     std::vector<int> equalizedGray(256, 0);
     for (int i = 0; i < 256; ++i)
@@ -415,7 +421,7 @@ std::unique_ptr<QImage> GeneralProcess::equalizeHistogramGrayImage(std::unique_p
     // 創建一個新的 QImage 對象，並設置其大小和格式
     auto equalizedImage = std::make_unique<QImage>(width, height, QImage::Format_RGB32);
 
-    // 應用均衡化後的灰度值到新圖像
+    // 應用均衡化後的灰階值到新圖像
     for (int y = 0; y < height; ++y)
     {
         for (int x = 0; x < width; ++x)
@@ -429,6 +435,7 @@ std::unique_ptr<QImage> GeneralProcess::equalizeHistogramGrayImage(std::unique_p
     return equalizedImage; // 返回均衡化後的圖像
 }
 
+// RGB直方圖均衡化
 std::unique_ptr<QImage> GeneralProcess::equalizeHistogramRGBImage(std::unique_ptr<QImage> &image)
 {
     if (!image)

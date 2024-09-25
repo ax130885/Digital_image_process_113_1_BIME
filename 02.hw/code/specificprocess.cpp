@@ -27,17 +27,17 @@ std::unique_ptr<QImage> SpecificProcess::grayscale_by_avg_rgb(std::unique_ptr<QI
             int green = qGreen(pixel);
             int blue = qBlue(pixel);
 
-            // 計算灰度值 (平均)
+            // 計算灰階值 (平均)
             int gray = static_cast<int>((red + green + blue) / 3);
-            // // 計算灰度值 (加權)
+            // // 計算灰階值 (加權)
             // int gray = static_cast<int>(0.299 * red + 0.587 * green + 0.114 * blue);
 
-            // 將灰度值設置為新像素的 RGB 值
+            // 將灰階值設置為新像素的 RGB 值
             grayImage->setPixel(x, y, qRgb(gray, gray, gray));
         }
     }
 
-    return grayImage; // 返回灰度圖像
+    return grayImage; // 返回灰階圖像
 }
 
 std::unique_ptr<QImage> SpecificProcess::grayscale_by_eyes_weight_rgb(std::unique_ptr<QImage> &image)
@@ -60,19 +60,19 @@ std::unique_ptr<QImage> SpecificProcess::grayscale_by_eyes_weight_rgb(std::uniqu
             int green = qGreen(pixel);
             int blue = qBlue(pixel);
 
-            // // 計算灰度值 (平均)
+            // // 計算灰階值 (平均)
             // int gray = static_cast<int>((red + green + blue) / 3);
-            // 計算灰度值 (加權)
+            // 計算灰階值 (加權)
             int gray = static_cast<int>(0.299 * red + 0.587 * green + 0.114 * blue);
-            // // 計算灰度值 (紅色, 測試用)
+            // // 計算灰階值 (紅色, 測試用)
             // int gray = static_cast<int>(1.0 * red + 0.0 * green + 0.0 * blue);
 
-            // 將灰度值設置為新像素的 RGB 值
+            // 將灰階值設置為新像素的 RGB 值
             grayImage->setPixel(x, y, qRgb(gray, gray, gray));
         }
     }
 
-    return grayImage; // 返回灰度圖像
+    return grayImage; // 返回灰階圖像
 }
 
 std::unique_ptr<QImage> SpecificProcess::calculateGrayDifference(std::unique_ptr<QImage> &image1, std::unique_ptr<QImage> &image2)
@@ -109,7 +109,7 @@ std::unique_ptr<QImage> SpecificProcess::calculateGrayDifference(std::unique_ptr
             // 計算差異
             int diff = qAbs(gray1 - gray2);
 
-            // 將差異值設置為新像素的灰度值
+            // 將差異值設置為新像素的灰階值
             diffImage->setPixel(x, y, qRgb(diff, diff, diff));
         }
     }

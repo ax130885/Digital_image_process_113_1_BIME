@@ -190,6 +190,11 @@ void MainWindow::on_scale_height_lineEdit_textEdited()
         }
         ui->scale_height_lineEdit->setText(QString::number(value));
     }
+    // 輸入不是數字時，設置為1
+    else
+    {
+        ui->scale_height_lineEdit->setText("1");
+    }
 
     if (image)
     {
@@ -222,6 +227,11 @@ void MainWindow::on_scale_width_lineEdit_textEdited()
             value = 1080;
         }
         ui->scale_width_lineEdit->setText(QString::number(value));
+    }
+    // 輸入不是數字時，設置為1
+    else
+    {
+        ui->scale_width_lineEdit->setText("1");
     }
 
     if (image)
