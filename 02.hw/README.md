@@ -1,3 +1,10 @@
+---
+Header:
+  Left: 影處HW2
+  Right: R12631070 林育新
+Footer:
+  Center: 
+---
 # Part 1. Histogram of an Image
 Solve the problems 2.12, 2.16, 2.18, 2.37, 3.12, 3.18 in the textbook.  
 
@@ -16,8 +23,9 @@ Assume for simplicity that the reflectance of the area is constant and equal to 
 **Q:** Develop an algorithm for converting a one-pixelthick m-path to a 4-path.  
 
 **A:**   
-4-path: 僅能上下左右移動(不可對角線)  
-m-path: 可以上下左右+對角線移動  
+4-path adjacency: 僅能上下左右移動(不可對角線)  
+8-path adjacency: 能上下左右對角自由移動 優先走對角線  
+m-path adjacency: 優先走上下左右 如果上下左右不在子集中 才能對角線移動  
 ```python
 def convert_mpath_to_4path(m_path):
     four_path = []
@@ -63,19 +71,16 @@ $$
 \end{bmatrix}
 $$
 
-**A:**  
-僅考慮存在於V集合當中的元素 (也就是元素!= 0 or 1的路徑不可走)  
-最短 4 path adjacency: 不存在。因為 4 path 只能上下左右移動，然而終點q上下左右鄰近的元素皆不在 set $V$ 當中。  
-最短 8 path adjacency: 不存在。因為從起點唯一的斜角元素不屬於 set $V$。  
-最短 m path adjacency: p (4, 1) → (4, 2) → (3, 3) → (2, 3) → q (1, 4)  
-
-
 **(b)** Repeat (a) but using $V = [1, 2]$.
 
 **A:**  
-僅考慮存在於V集合當中的元素 (也就是元素!= 1 or 2的路徑不可走)  
-最短 4 path adjacency: p (4, 1) → (3, 1) → (2, 1) → (2, 2) → (1, 2) → (1, 3) → q (1, 4)  
-最短 m path adjacency: p (4, 1) → (3, 2) → (2, 2) → (1, 2) → (1, 3) → q (1, 4)  
+4-path adjacency: 僅能上下左右移動(不可對角線)  
+8-path adjacency: 能上下左右對角自由移動 優先走對角線  
+m-path adjacency: 優先走上下左右 如果上下左右不在子集中 才能對角線移動  
+題目要求算"lengths of shortest path"  
+<p align="center">
+    <img src="readme_figure/image-5.png" alt="alt text" width="800">
+</p>
 
 ### 【2.37】
 **Q:** We know from Eq. (2-45) that an affine transformation of coordinates is given by  
@@ -265,13 +270,13 @@ $$
 $$w = [1, 2, 1, 2, 4, 2, 1, 2, 1]$$
 $$f(2,3)= [0, 0, 0, 0, 1, 0, 0, 1, 0]$$
 
-**(b)** * Compute the convolution $w$ ☆ $f$ using theminimum zero padding needed. Show the details of your computations when the kernel is centered on point $(2,3)$ of $f$; and then show the final full convolution result.  
+**(b)** * Compute the convolution $w$ ★ $f$ using theminimum zero padding needed. Show the details of your computations when the kernel is centered on point $(2,3)$ of $f$; and then show the final full convolution result.  
 **A:**  
 計算卷積時要把w反轉180，並且此題要求須要zero-padding。
 $$w_{inv} = [1, 2, 1, 2, 4, 2, 1, 2, 1]$$
 $$f(2,3)= [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0]$$
 $$ 
-w ☆ f = [0, 0, 0, 0, 6, 0, 0, 6, 0] = 
+w ★ f = [0, 0, 0, 0, 6, 0, 0, 6, 0] = 
 \begin{bmatrix}
     0 & 0 & 0 \\
     0 & 6 & 0 \\
@@ -279,7 +284,7 @@ w ☆ f = [0, 0, 0, 0, 6, 0, 0, 6, 0] =
 \end{bmatrix}
 $$
 
-**(c)** Repeat (b), but for correlation, $w$ ★ $f$ .  
+**(c)** Repeat (b), but for correlation, $w$ ☆ $f$ .  
 **A:**  
 計算correlation跟convolution的差別只在，correlation不用反轉w，而convolution需要。  
 但因為**此題的w反轉前後相同，因此答案與 (b) 相同。**
