@@ -91,19 +91,56 @@ $$
 
 
 ### 【3.44】
-**Q:**  Are any of the following highpass (sharpening) kernels separable? For those that are, find vectorsv and $w$ such that $vw^T$ equals the kernel(s).  
+**Q:**  Are any of the following highpass (sharpening) kernels separable? For those that are, find vectors $v$ and $w$ such that $vw^T$ equals the kernel(s).  
 
 **(a)** The Laplacian kernels in Figs. 3.45(a) and (b).  
 ![alt text](image.png)
 **A:**  
+若矩陣想分離為兩個向量的外積，需要滿足矩陣的rank=1。  
+而3.45(a),(b)的rank=2，不滿足條件，因此無法分解。  
 
 **(b)** The Roberts cross-gradient kernels shown in Figs. 3.50(b) and (c).  
 ![alt text](image-1.png)
 **A:**  
+3.50(b),(c)的rank同樣為2，不滿足條件，因此無法分解。  
 
 **(c)** * The Sobel kernels in Figs. 3.50(d) and (e).  
 **A:**  
+3.50(d):  
+$$
+\begin{bmatrix}
+  -1 & -2 & -1 \\
+  0 & 0 & 0 \\
+  1 & 2 & 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+  -1 \\
+  0 \\
+  1
+\end{bmatrix}
+\begin{bmatrix}
+  1 & 2 & 1
+\end{bmatrix}
+$$
 
+3.50(e):  
+$$
+\begin{bmatrix}
+  -1 & 0 & 1 \\
+  -2 & 0 & 2 \\
+  -1 & 0 & 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+  1 \\
+  2 \\
+  1
+\end{bmatrix}
+\begin{bmatrix}
+  -1 & 0 & 1
+\end{bmatrix}
+$$
 
 ### 【4.3】
 **Q:** What is the convolution of two, 1-D impulses:  
@@ -123,11 +160,14 @@ $$
 \delta(t-t_0)*\delta(t+t_0)=\int_{-\infty}^{\infty} \delta(\tau-\tau_0)\delta(t-(\tau+\tau_0)) \, d\tau = \delta(t)
 $$
 
-### 【4.51】
+### 【4.51】未完成
 **Q:** Find the equivalent frequency-domain filter transfer function for the Laplacian kernel shown in Fig. 3.45(a). Show that your result behaves as a highpass filter transfer function. (Hint: Study the solution to Problem 4.47.)  
 
 **A:** 
-
+![alt text](image-2.png)
+![alt text](image-3.png)
+![alt text](image-4.png)
+![alt text](image-5.png)
 
 <br/>
 
@@ -157,21 +197,9 @@ Marr-Hildreth 邊緣偵測方法透過將影像與高斯拉普拉斯算子進行
 
 ## 【算法實現與解釋】
 ### 灰階
-
-
 ### 二值化
 
 
-### 縮放
-
-
-### 量化
-
-### 亮度調整
-
-### 對比調整
-
-### 直方圖均衡化
 
 
 
