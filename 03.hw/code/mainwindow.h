@@ -22,15 +22,17 @@ public:
     ~MainWindow();
 
     void show_image_on_grphics_view(std::unique_ptr<QImage> &image, QGraphicsView *graphicsView);
-    void show_gray_hist_on_grphics_view(std::unique_ptr<QImage> &image, QGraphicsView *graphicsView);
-    void show_rgb_hist_on_grphics_view(std::unique_ptr<QImage> &image, QGraphicsView *graphicsView);
+    // void show_gray_hist_on_grphics_view(std::unique_ptr<QImage> &image, QGraphicsView *graphicsView);
+    // void show_rgb_hist_on_grphics_view(std::unique_ptr<QImage> &image, QGraphicsView *graphicsView);
 
 private slots:
     void on_uploadfile_clicked();
 
-    void on_spatialFilter_kernelSize_spinbox_valueChanged();
+    void on_ApplySpatialFilter_clicked();
 
-    void on_spatialFilter_comboBox_currentTextChanged();
+    void on_ApplySobelandLoG_clicked();
+
+    void on_ApplylocalMeanConstrastEnhancement_clicked();
 
 private:
     Ui::MainWindow *ui;

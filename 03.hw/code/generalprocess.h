@@ -10,9 +10,11 @@ class GeneralProcess : public QObject
 public:
     explicit GeneralProcess(QObject *parent = nullptr);
     std::unique_ptr<QImage> UploadFile();
+    // HW1
     std::unique_ptr<QImage> calculateGrayHistogram(std::unique_ptr<QImage> &image);
     std::unique_ptr<QImage> calculateRGBHistogram(std::unique_ptr<QImage> &image);
     std::unique_ptr<QImage> binaryzation(std::unique_ptr<QImage> &image, int *threshold_rgb);
+    // HW2
     std::unique_ptr<QImage> scaleImageBilinear(std::unique_ptr<QImage> &image, const int *newWidth, const int *newHeight);
     std::unique_ptr<QImage> scaleImageNearestNeighbor(std::unique_ptr<QImage> &image, const int *newWidth, const int *newHeight);
     std::unique_ptr<QImage> quantization(std::unique_ptr<QImage> &image, int *bits);
@@ -20,10 +22,20 @@ public:
     std::unique_ptr<QImage> adjustContrast(std::unique_ptr<QImage> &image, float *contrast);
     std::unique_ptr<QImage> equalizeHistogramGrayImage(std::unique_ptr<QImage> &image);
     std::unique_ptr<QImage> equalizeHistogramRGBImage(std::unique_ptr<QImage> &image);
+    // HW3
+    std::unique_ptr<QImage> spatialFilter(std::unique_ptr<QImage> &image, int kernelSize = 3, QString spatialFilterType = "median 中位");
+    std::unique_ptr<QImage> paddingImage(std::unique_ptr<QImage> &image, int kernelSize = 3, QString type = "zero");
+    std::unique_ptr<QImage> sobelEdgeDetect(std::unique_ptr<QImage> &image);
+    std::unique_ptr<QImage> MarrHildrethEdgeDetection(const QImage &image, int kernelSize, double sigma, double threshold);
+    std::unique_ptr<QImage> localMeanContrastEnhancement(std::unique_ptr<QImage> &image, int kernelSize, double k0 = 0.0, double k1 = 0.25, double k2 = 0.0, double k3 = 0.1, double C = 228);
 
 signals:
 
 private:
+    // HW3 for MarrHildrethEdgeDetection
+    std::vector<std::vector<double>> createLoGKernel(double sigma, int kernelSize);
+    std::vector<std::vector<double>> applyLoGFilter(const QImage &image, const std::vector<std::vector<double>> &kernel);
+    std::unique_ptr<QImage> applyZeroCrossing(const std::vector<std::vector<double>> &logResponse, double threshold);
 };
 
 #endif // GENERALPROCESS_H

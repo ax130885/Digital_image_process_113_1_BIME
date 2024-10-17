@@ -7,7 +7,7 @@ SpecificProcess::SpecificProcess(QObject *parent)
 {
 }
 
-// 空間濾波器
+// 空間濾波器(自訂kernel size做最大, 最小, 平均, 中位濾波)
 std::unique_ptr<QImage> SpecificProcess::spatialFilter(std::unique_ptr<QImage> &image, int kernelSize, QString spatialFilterType)
 {
     // 檢查圖像指標是否為空
@@ -35,7 +35,7 @@ std::unique_ptr<QImage> SpecificProcess::spatialFilter(std::unique_ptr<QImage> &
     auto paddedImage = paddingImage(image, kernelSize);
 
     // 獲取填充後的圖像寬度和高度
-    int paddedWidth = paddedImage->bytesPerLine() / sizeof(QRgb);
+    int paddedWidth = static_cast<int>(paddedImage->bytesPerLine() / sizeof(QRgb));
 
     // 取得圖像的像素數據
     const QRgb *paddedData = reinterpret_cast<const QRgb *>(paddedImage->constBits());
