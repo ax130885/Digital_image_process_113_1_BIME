@@ -465,7 +465,7 @@ std::unique_ptr<QImage> GeneralProcess::equalizeHistogramRGBImage(std::unique_pt
         }
     }
 
-    // 計算累積直方圖
+    // 計算累積直方圖 (CDF)
     std::vector<int> redCumulativeHistogram(256, 0);
     std::vector<int> greenCumulativeHistogram(256, 0);
     std::vector<int> blueCumulativeHistogram(256, 0);
@@ -481,12 +481,13 @@ std::unique_ptr<QImage> GeneralProcess::equalizeHistogramRGBImage(std::unique_pt
         blueCumulativeHistogram[i] = blueCumulativeHistogram[i - 1] + blueHistogram[i];
     }
 
-    // 計算均衡化後的 RGB 值
+    // 計算均衡化後的 RGB 值 (把CDF乘上強度最大值255)
     int totalPixels = width * height;
     std::vector<int> equalizedRed(256, 0);
     std::vector<int> equalizedGreen(256, 0);
     std::vector<int> equalizedBlue(256, 0);
 
+    // 四捨五入後新的強度值
     for (int i = 0; i < 256; ++i)
     {
         equalizedRed[i] = static_cast<int>(255.0 * redCumulativeHistogram[i] / totalPixels + 0.5);
