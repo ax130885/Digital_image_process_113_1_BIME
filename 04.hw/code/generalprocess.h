@@ -28,6 +28,10 @@ public:
     std::unique_ptr<QImage> sobelEdgeDetect(std::unique_ptr<QImage> &image);
     std::unique_ptr<QImage> MarrHildrethEdgeDetection(const QImage &image, int kernelSize, double sigma, double threshold);
     std::unique_ptr<QImage> localMeanContrastEnhancement(std::unique_ptr<QImage> &image, int kernelSize, double k0 = 0.0, double k1 = 0.25, double k2 = 0.0, double k3 = 0.1, double C = 228);
+    // HW4
+    std::unique_ptr<QImage> fft(const QImage &image, QString Type = "spectrum");
+    // std::unique_ptr<QImage> fft(const QImage &image);
+    std::unique_ptr<QImage> ifft(const QImage &image);
 
 signals:
 

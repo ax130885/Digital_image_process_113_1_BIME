@@ -101,12 +101,14 @@ void MainWindow::on_ApplySpatialFilter_clicked()
     if (image)
     {
         // 空間濾波
-        // 取得spinbox設置的kernel size
-        int spatialFilter_kernelSize = ui->spatialFilter_kernelSize_spinbox->value();
-        // 取得comboBox設置的濾波種類
-        QString spatialFilterType = ui->spatialFilter_comboBox->currentText();
+        // // 取得spinbox設置的kernel size
+        // int spatialFilter_kernelSize = ui->spatialFilter_kernelSize_spinbox->value();
+        // // 取得comboBox設置的濾波種類
+        // QString spatialFilterType = ui->spatialFilter_comboBox->currentText();
         // 計算空間濾波圖像
-        std::unique_ptr<QImage> spatialFilterImage = gp.spatialFilter(image, spatialFilter_kernelSize, spatialFilterType);
+        std::unique_ptr<QImage> spatialFilterImage = gp.fft(*image, "spectrum");
+        // std::unique_ptr<QImage> spatialFilterImage = gp.fft(*image, "phase");
+        // std::unique_ptr<QImage> spatialFilterImage = gp.fft(*image);
         if (spatialFilterImage)
         {
             show_image_on_grphics_view(spatialFilterImage, ui->spatialFilterImage);
