@@ -22,17 +22,17 @@ public:
     ~MainWindow();
 
     void show_image_on_grphics_view(std::unique_ptr<QImage> &image, QGraphicsView *graphicsView);
-    // void show_gray_hist_on_grphics_view(std::unique_ptr<QImage> &image, QGraphicsView *graphicsView);
-    // void show_rgb_hist_on_grphics_view(std::unique_ptr<QImage> &image, QGraphicsView *graphicsView);
 
 private slots:
     void on_uploadfile_clicked();
 
-    void on_ApplySpatialFilter_clicked();
+    void on_ApplyFFT_clicked();
 
-    void on_ApplySobelandLoG_clicked();
+    void on_ApplyHLPF_clicked();
 
-    void on_ApplylocalMeanConstrastEnhancement_clicked();
+    void on_ApplyHomomorphic_clicked();
+
+    void on_ApplyMotionBlurred_clicked();
 
 private:
     Ui::MainWindow *ui;

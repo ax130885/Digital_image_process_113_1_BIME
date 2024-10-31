@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QImageReader>
 #include <QGraphicsPixmapItem>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -38,47 +39,6 @@ void MainWindow::on_uploadfile_clicked()
 
     // 顯示原圖
     show_image_on_grphics_view(image, ui->originalimage);
-
-    // // sobel 邊緣檢測
-    // std::unique_ptr<QImage> sobelImage = gp.sobelEdgeDetect(image);
-    // if (sobelImage)
-    // {
-    //     show_image_on_grphics_view(sobelImage, ui->sobelImage);
-    // }
-
-    // // Marr-Hildreth
-    // // 取得spinbox設置的sigma
-    // double sigma = ui->sigma_spinbox->value();
-    // // 取得spinbox設置的threshold
-    // double threshold = ui->threshold_spinbox->value();
-    // // 計算 Marr-Hildreth 邊緣檢測圖像
-    // std::unique_ptr<QImage> marrHildrethImage = gp.MarrHildrethEdgeDetection(*image, sigma, threshold);
-    // if (marrHildrethImage)
-    // {
-    //     show_image_on_grphics_view(marrHildrethImage, ui->marrHildrethImage);
-    // }
-
-    // // 局部統計增強
-    // // 取得spinbox設置的kernelSize
-    // int kernelSize = ui->localStatisticalEnhancement_kernelSize_spinbox->value();
-    // // 取得spinbox設置的k0
-    // double k0 = ui->localStatisticalEnhancement_k0_spinbox->value();
-    // // 取得spinbox設置的k1
-    // double k1 = ui->localStatisticalEnhancement_k1_spinbox->value();
-    // // 取得spinbox設置的k2
-    // double k2 = ui->localStatisticalEnhancement_k2_spinbox->value();
-    // // 取得spinbox設置的k3
-    // double k3 = ui->localStatisticalEnhancement_k3_spinbox->value();
-    // // 取得spinbox設置的C
-    // double C = ui->localStatisticalEnhancement_C_spinbox->value();
-    // // 計算局部統計增強圖像
-    // std::unique_ptr<QImage> localMeanContrastEnhancementImage = gp.localMeanContrastEnhancement(image, kernelSize, k0, k1, k2, k3, C);
-    // if (localMeanContrastEnhancementImage)
-    // {
-    //     show_image_on_grphics_view(localMeanContrastEnhancementImage, ui->localMeanContrastEnhancementImage);
-    // }
-
-    // 新功能... (開發過程 1.在ui拉好介面 2.在此取得所需的值 3.在generalprocess.h中新增函數 4.在generalprocess.cpp中實現函數 5.在此調用函數 6.使用show_image_on_grphics_view函數顯示圖片 7.定義取值方塊的槽函數也要做相同功能)
 }
 
 // 顯示圖片(通用功能)
@@ -96,76 +56,192 @@ void MainWindow::show_image_on_grphics_view(std::unique_ptr<QImage> &image, QGra
     graphicsView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio); // 調整視圖以適應圖片
 }
 
-void MainWindow::on_ApplySpatialFilter_clicked()
+void MainWindow::on_ApplyFFT_clicked()
 {
     if (image)
     {
-        // 空間濾波
-        // // 取得spinbox設置的kernel size
-        // int spatialFilter_kernelSize = ui->spatialFilter_kernelSize_spinbox->value();
-        // // 取得comboBox設置的濾波種類
-        // QString spatialFilterType = ui->spatialFilter_comboBox->currentText();
-        // 計算空間濾波圖像
-        std::unique_ptr<QImage> spatialFilterImage = gp.fft(*image, "spectrum");
-        // std::unique_ptr<QImage> spatialFilterImage = gp.fft(*image, "phase");
-        // std::unique_ptr<QImage> spatialFilterImage = gp.fft(*image);
-        if (spatialFilterImage)
+        auto [shift_dft, fftImage_magnitude, fftImage_phase] = gp.fft(*image, "show");
+        if (fftImage_magnitude && fftImage_phase)
         {
-            show_image_on_grphics_view(spatialFilterImage, ui->spatialFilterImage);
+            show_image_on_grphics_view(fftImage_magnitude, ui->fftImage_magnitude);
+            show_image_on_grphics_view(fftImage_phase, ui->fftImage_phase);
+        }
+
+        // IFFT
+        std::unique_ptr<QImage> ifftImage = gp.ifft(shift_dft);
+        if (ifftImage)
+        {
+
+            show_image_on_grphics_view(ifftImage, ui->ifftImage);
+        }
+        std::unique_ptr<QImage> diff = sp.diffImage(*image, *ifftImage);
+        if (diff)
+        {
+            show_image_on_grphics_view(diff, ui->diff);
         }
     }
 }
 
-void MainWindow::on_ApplySobelandLoG_clicked()
+void MainWindow::on_ApplyHLPF_clicked()
 {
-    // sobel 邊緣檢測
-    std::unique_ptr<QImage> sobelImage = gp.sobelEdgeDetect(image);
-    if (sobelImage)
+    if (image)
     {
-        show_image_on_grphics_view(sobelImage, ui->sobelImage);
-    }
+        // 取得spinbox設置的D0
+        double D0 = ui->prob2_D0_spinbox->value();
+        // 取得spinbox設置的n
+        int n = ui->prob2_n_spinbox->value();
 
-    // Marr-Hildreth
-    // 取得spinbox設置的kernelSize
-    int kernelSize = ui->log_kernelSize_spinbox->value();
-    // 取得spinbox設置的sigma
-    double sigma = ui->log_sigma_spinbox->value();
-    // 取得spinbox設置的threshold
-    double threshold = ui->log_threshold_spinbox->value();
-    // 計算 Marr-Hildreth 邊緣檢測圖像
-    std::unique_ptr<QImage> marrHildrethImage = gp.MarrHildrethEdgeDetection(*image, kernelSize, sigma, threshold);
-    if (marrHildrethImage)
-    {
-        show_image_on_grphics_view(marrHildrethImage, ui->marrHildrethImage);
+        // 對原圖作傅立葉變換
+        auto [shift_dft, _1, _2] = gp.fft(*image);
+
+        // 計算理想低通濾波器圖像
+        cv::Mat idealLowPass = sp.idealLowPassFilter(shift_dft, D0);
+        if (!idealLowPass.empty())
+        {
+            std::unique_ptr<QImage> idealLowPassImage = gp.ifft(idealLowPass);
+            show_image_on_grphics_view(idealLowPassImage, ui->idealLowPassImage);
+        }
+
+        // 計算高斯低通濾波器圖像
+        cv::Mat gaussianLowPass = sp.gaussianLowPassFilter(shift_dft, D0);
+        if (!gaussianLowPass.empty())
+        {
+            std::unique_ptr<QImage> gaussianLowPassImage = gp.ifft(gaussianLowPass);
+            show_image_on_grphics_view(gaussianLowPassImage, ui->gaussianLowPassImage);
+        }
+
+        // 計算巴特沃斯低通濾波器圖像
+        cv::Mat butterworthLowPass = sp.butterworthLowPassFilter(shift_dft, D0, n);
+        if (!butterworthLowPass.empty())
+        {
+            std::unique_ptr<QImage> butterworthLowPassImage = gp.ifft(butterworthLowPass);
+            show_image_on_grphics_view(butterworthLowPassImage, ui->butterworthLowPassImage);
+        }
+
+        // 計算理想高通濾波器圖像
+        cv::Mat idealHighPass = sp.idealHighPassFilter(shift_dft, D0);
+        if (!idealHighPass.empty())
+        {
+            std::unique_ptr<QImage> idealHighPassImage = gp.ifft(idealHighPass);
+            show_image_on_grphics_view(idealHighPassImage, ui->idealHighPassImage);
+        }
+
+        // 計算高斯高通濾波器圖像
+        cv::Mat gaussianHighPass = sp.gaussianHighPassFilter(shift_dft, D0);
+        if (!gaussianHighPass.empty())
+        {
+            std::unique_ptr<QImage> gaussianHighPassImage = gp.ifft(gaussianHighPass);
+            show_image_on_grphics_view(gaussianHighPassImage, ui->gaussianHighPassImage);
+        }
+
+        // 計算巴特沃斯高通濾波器圖像
+        cv::Mat butterworthHighPass = sp.butterworthHighPassFilter(shift_dft, D0, n);
+        if (!butterworthHighPass.empty())
+        {
+            std::unique_ptr<QImage> butterworthHighPassImage = gp.ifft(butterworthHighPass);
+            show_image_on_grphics_view(butterworthHighPassImage, ui->butterworthHighPassImage);
+        }
     }
 }
 
-void MainWindow::on_ApplylocalMeanConstrastEnhancement_clicked()
+void MainWindow::on_ApplyHomomorphic_clicked()
 {
-    // 直方圖均衡化
-    std::unique_ptr<QImage> equalizedImage = gp.equalizeHistogramRGBImage(image);
-    if (equalizedImage)
+    if (image)
     {
-        show_image_on_grphics_view(equalizedImage, ui->equalizeHistogramRGBImage);
-    }
+        // 取得spinbox設置的gamma_H
+        double gamma_H = ui->prob3_gamma_H_spinbox->value();
+        // 取得spinbox設置的gamma_L
+        double gamma_L = ui->prob3_gamma_L_spinbox->value();
+        // 取得spinbox設置的D0
+        double D0 = ui->prob3_D0_spinbox->value();
+        // 取得spinbox設置的c
+        double c = ui->prob3_c_spinbox->value();
 
-    // 局部統計增強
-    // 取得spinbox設置的kernelSize
-    int kernelSize = ui->localStatisticalEnhancement_kernelSize_spinbox->value();
-    // 取得spinbox設置的k0
-    double k0 = ui->localStatisticalEnhancement_k0_spinbox->value();
-    // 取得spinbox設置的k1
-    double k1 = ui->localStatisticalEnhancement_k1_spinbox->value();
-    // 取得spinbox設置的k2
-    double k2 = ui->localStatisticalEnhancement_k2_spinbox->value();
-    // 取得spinbox設置的k3
-    double k3 = ui->localStatisticalEnhancement_k3_spinbox->value();
-    // 取得spinbox設置的C
-    double C = ui->localStatisticalEnhancement_C_spinbox->value();
-    // 計算局部統計增強圖像
-    std::unique_ptr<QImage> localMeanContrastEnhancementImage = gp.localMeanContrastEnhancement(image, kernelSize, k0, k1, k2, k3, C);
-    if (localMeanContrastEnhancementImage)
+        // 計算同態濾波(homomorphic)圖像
+        std::unique_ptr<QImage> homomorphicImage = sp.homomorphicFilter(image, gamma_H, gamma_L, D0, c);
+        if (homomorphicImage)
+        {
+            show_image_on_grphics_view(homomorphicImage, ui->homomorphicImage);
+        }
+    }
+}
+
+void MainWindow::on_ApplyMotionBlurred_clicked()
+{
+    if (image)
     {
-        show_image_on_grphics_view(localMeanContrastEnhancementImage, ui->localMeanContrastEnhancementImage);
+
+        // 取得spinbox設置的T (曝光時間)
+        double T = ui->prob4_T_spinbox->value();
+        // 取得spinbox設置的a (X方向運動的距離)
+        double a = ui->prob4_a_spinbox->value();
+        // 取得spinbox設置的b (Y方向運動的距離)
+        double b = ui->prob4_b_spinbox->value();
+        // 取得spinbox設置的inverse_k
+        double inverse_k = ui->prob4_inverse_k_spinbox->value();
+        // 取得spinbox設置的wiener_k
+        double wiener_k = ui->prob4_wiener_k_spinbox->value();
+
+        // 對原圖作傅立葉變換
+        auto [shift_dft, _1, _2] = gp.fft(*image);
+
+        // 計算運動模糊圖像
+        cv::Mat motionBlurred = sp.motionBlurred(shift_dft, a, b, T);
+        std::unique_ptr<QImage> motionBlurredImage;
+
+        if (!motionBlurred.empty())
+        {
+            motionBlurredImage = gp.ifft(motionBlurred);
+            show_image_on_grphics_view(motionBlurredImage, ui->motionBlurredImage);
+        }
+
+        // 計算運動模糊+白高斯噪音sigma=20圖像
+        double sigma = 20;
+        std::unique_ptr<QImage> GaussianNoiseImage = sp.GaussianNoise(motionBlurredImage, sigma);
+        if (GaussianNoiseImage)
+        {
+            show_image_on_grphics_view(GaussianNoiseImage, ui->GaussianNoiseImage);
+        }
+
+        // 計算inverse filter圖像 (F=G/H)
+        cv::Mat inverseFilterOrigin = sp.inverseFilter(shift_dft, a, b, T, inverse_k);
+        std::unique_ptr<QImage> inverseFilterOriginImage;
+        if (!inverseFilterOrigin.empty())
+        {
+            inverseFilterOriginImage = gp.ifft(inverseFilterOrigin);
+            show_image_on_grphics_view(inverseFilterOriginImage, ui->inverseFilterImage1);
+        }
+
+        auto [shift_dft_noise, _3, _4] = gp.fft(*GaussianNoiseImage);
+        cv::Mat inverseFilter = sp.inverseFilter(shift_dft_noise, a, b, T, inverse_k);
+        std::unique_ptr<QImage> inverseFilterImage;
+        if (!inverseFilter.empty())
+        {
+            inverseFilterImage = gp.ifft(inverseFilter);
+            show_image_on_grphics_view(inverseFilterImage, ui->inverseFilterImage2);
+        }
+
+        // 計算wiener濾波器圖像
+        cv::Mat wienerFilter = sp.wienerFilter(shift_dft_noise, a, b, T, wiener_k);
+        std::unique_ptr<QImage> wienerFilterImage;
+        if (!wienerFilter.empty())
+        {
+            wienerFilterImage = gp.ifft(wienerFilter);
+            show_image_on_grphics_view(wienerFilterImage, ui->wienerFilterImage);
+        }
+
+        // 原圖 - inverse filter圖像
+        std::unique_ptr<QImage> diffImage_inv = sp.diffImage(*image, *inverseFilterImage);
+        if (diffImage_inv)
+        {
+            show_image_on_grphics_view(diffImage_inv, ui->diffImage_inv);
+        }
+
+        // 原圖 - wiener濾波器圖像
+        std::unique_ptr<QImage> diffImage_wiener = sp.diffImage(*image, *wienerFilterImage);
+        if (diffImage_wiener)
+        {
+            show_image_on_grphics_view(diffImage_wiener, ui->diffImage_wiener);
+        }
     }
 }

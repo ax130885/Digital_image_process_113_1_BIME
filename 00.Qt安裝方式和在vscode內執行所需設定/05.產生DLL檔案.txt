@@ -38,9 +38,17 @@ cp -urp C:\Qt\Tools\mingw1120_64\bin\libgcc_s_seh-1.dll" C:\Qt\Tools\mingw1120_6
 在window搜尋找到Qt 6.7.2 (MSVC 2019 64-bit)
 打開後cd至剛剛創建的資料夾
 輸入windeployqt.exe .\code.exe # 產生qt相關模組的動態連結函式庫
-如果跳找不到Visual Studio 路徑相關的warning 可以直接使用Visual Studio 的開發者命令提示符 (Developer Command Prompt for VS)
+
+如果跳找不到Visual Studio 路徑相關的warning 可以直接使用Visual Studio 的開發者命令提示符 
+(Developer Command Prompt for VS)
+
 同樣進入code.exe所在資料夾 輸入windeployqt.exe .\code.exe
 
 如果執行後一樣產生"無法找到程序輸入點"的錯誤
 代表建置版本與windeployqt.exe版本不一致
 一定要找到一樣的才行!
+
+【複製opencv dll】
+"C:\opencv\build\x64\vc16\bin\opencv_world4100.dll"
+"C:\opencv\build\x64\vc16\bin\opencv_world4100d.dll"
+手動把這兩個檔案丟到code.exe的資料夾

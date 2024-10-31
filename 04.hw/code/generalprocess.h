@@ -4,6 +4,13 @@
 #include <QObject>
 #include <QImage>
 
+#include <tuple>
+
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+
 class GeneralProcess : public QObject
 {
     Q_OBJECT
@@ -29,9 +36,8 @@ public:
     std::unique_ptr<QImage> MarrHildrethEdgeDetection(const QImage &image, int kernelSize, double sigma, double threshold);
     std::unique_ptr<QImage> localMeanContrastEnhancement(std::unique_ptr<QImage> &image, int kernelSize, double k0 = 0.0, double k1 = 0.25, double k2 = 0.0, double k3 = 0.1, double C = 228);
     // HW4
-    std::unique_ptr<QImage> fft(const QImage &image, QString Type = "spectrum");
-    // std::unique_ptr<QImage> fft(const QImage &image);
-    std::unique_ptr<QImage> ifft(const QImage &image);
+    std::tuple<cv::Mat, std::unique_ptr<QImage>, std::unique_ptr<QImage>> fft(const QImage &image, const QString show = "no_show");
+    std::unique_ptr<QImage> ifft(cv::Mat shift_dft);
 
 signals:
 

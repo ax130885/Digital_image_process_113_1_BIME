@@ -4,12 +4,6 @@
 #include <QMessageBox>
 #include <QPainter>
 
-#include <opencv2/opencv.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
-#include <chrono>
-
 GeneralProcess::GeneralProcess(QObject *parent)
     : QObject{parent}
 {
@@ -992,7 +986,7 @@ std::unique_ptr<QImage> GeneralProcess::localMeanContrastEnhancement(std::unique
 }
 
 // 快速傅立葉變換 Fast Fourier Transform (FFT)
-std::unique_ptr<QImage> GeneralProcess::fft(const QImage &image, const QString Type)
+std::tuple<cv::Mat, std::unique_ptr<QImage>, std::unique_ptr<QImage>> GeneralProcess::fft(const QImage &image, const QString show)
 {
     // 獲取圖像的寬度和高度
     int width = image.width();
@@ -1003,6 +997,7 @@ std::unique_ptr<QImage> GeneralProcess::fft(const QImage &image, const QString T
 
     // 創建一個新的 QImage 對象，並設置其大小和格式
     auto fftImage = std::make_unique<QImage>(width, height, QImage::Format_RGB32);
+    auto phaseImage = std::make_unique<QImage>(width, height, QImage::Format_RGB32); // 新增相位圖的 QImage
 
     // 將灰度圖像轉換為 OpenCV 的 Mat 對象
     cv::Mat grayMat(height, width, CV_8UC1, grayImage.bits(), grayImage.bytesPerLine());
@@ -1011,25 +1006,47 @@ std::unique_ptr<QImage> GeneralProcess::fft(const QImage &image, const QString T
     cv::Mat complexMat;
     cv::dft(cv::Mat_<float>(grayMat), complexMat, cv::DFT_COMPLEX_OUTPUT);
 
-    if (Type == "spectrum")
+    // 將頻譜圖中心化
+    int cx = complexMat.cols / 2;
+    int cy = complexMat.rows / 2;
+
+    cv::Mat q0(complexMat, cv::Rect(0, 0, cx, cy));   // 左上
+    cv::Mat q1(complexMat, cv::Rect(cx, 0, cx, cy));  // 右上
+    cv::Mat q2(complexMat, cv::Rect(0, cy, cx, cy));  // 左下
+    cv::Mat q3(complexMat, cv::Rect(cx, cy, cx, cy)); // 右下
+
+    cv::Mat tmp;
+    q0.copyTo(tmp);
+    q3.copyTo(q0);
+    tmp.copyTo(q3);
+
+    q1.copyTo(tmp);
+    q2.copyTo(q1);
+    tmp.copyTo(q2);
+
+    cv::Mat shift_dft = complexMat;
+
+    if (show == "show")
     {
+        double minSpectrumValue = 0.0, maxSpectrumValue = 0.0; // 初始化 Fmin 和 Fmax
+
         // 計算頻譜的幅度
-        cv::Mat spectrum;
+        cv::Mat magnitude;
         cv::Mat complexPlanes[] = {cv::Mat::zeros(complexMat.size(), CV_32F), cv::Mat::zeros(complexMat.size(), CV_32F)};
         cv::split(complexMat, complexPlanes);
-        cv::magnitude(complexPlanes[0], complexPlanes[1], spectrum);
+        cv::magnitude(complexPlanes[0], complexPlanes[1], magnitude);
 
-        // 對頻譜進行對數變換並計算 Fmin 和 Fmax
-        spectrum += cv::Scalar::all(1);
-        cv::log(spectrum, spectrum);
+        // 對頻譜進行對數變換
+        magnitude += cv::Scalar::all(1);
+        cv::log(magnitude, magnitude);
 
-        double minSpectrumValue, maxSpectrumValue;
-        cv::minMaxLoc(spectrum, &minSpectrumValue, &maxSpectrumValue);
+        // 計算 Fmin 和 Fmax
+        cv::minMaxLoc(magnitude, &minSpectrumValue, &maxSpectrumValue);
 
-        // 使用公式將範圍歸一化
+        // 歸一化
         cv::Mat normalizedSpectrum;
         const double G = 255.0;
-        spectrum.convertTo(normalizedSpectrum, CV_32F, G / (maxSpectrumValue - minSpectrumValue), -G * minSpectrumValue / (maxSpectrumValue - minSpectrumValue));
+        magnitude.convertTo(normalizedSpectrum, CV_32F, G / (maxSpectrumValue - minSpectrumValue), -G * minSpectrumValue / (maxSpectrumValue - minSpectrumValue));
 
         // 將頻譜圖轉換為 QImage
         for (int y = 0; y < height; ++y)
@@ -1041,10 +1058,7 @@ std::unique_ptr<QImage> GeneralProcess::fft(const QImage &image, const QString T
                 fftImage->setPixel(x, y, qRgb(gray, gray, gray));
             }
         }
-    }
 
-    else if (Type == "phase")
-    {
         // 將結果轉換為相位圖
         cv::Mat phaseMat;
         cv::Mat planes[] = {cv::Mat::zeros(complexMat.size(), CV_32F), cv::Mat::zeros(complexMat.size(), CV_32F)};
@@ -1059,55 +1073,66 @@ std::unique_ptr<QImage> GeneralProcess::fft(const QImage &image, const QString T
             {
                 float value = phaseMat.at<float>(y, x);
                 int gray = static_cast<int>(value * 255);
-                fftImage->setPixel(x, y, qRgb(gray, gray, gray));
+                phaseImage->setPixel(x, y, qRgb(gray, gray, gray));
             }
         }
+        return {shift_dft, std::move(fftImage), std::move(phaseImage)};
     }
+
+    else if (show == "no_show")
+    {
+        return {shift_dft, nullptr, nullptr};
+    }
+
     else
     {
-        QMessageBox::critical(nullptr, "Error", "Invalid output type.");
-        return nullptr; // 返回 nullptr 表示錯誤
+        QMessageBox::critical(nullptr, "Error", "Invalid show type.");
+        return {shift_dft, nullptr, nullptr};
     }
-
-    return fftImage; // 返回傅立葉變換後的圖像
 }
 
-// 快速傅立葉逆變換 Inverse Fast Fourier Transform (IFFT)
-std::unique_ptr<QImage> GeneralProcess::ifft(const QImage &image)
+std::unique_ptr<QImage> GeneralProcess::ifft(cv::Mat shift_dft)
 {
-    // 獲取圖像的寬度和高度
-    int width = image.width();
-    int height = image.height();
+    // 將頻譜圖反中心化 (inverse shift)
+    int cx = shift_dft.cols / 2;
+    int cy = shift_dft.rows / 2;
 
-    // 將圖像轉換為灰度圖像
-    auto grayImage = image.convertToFormat(QImage::Format_Grayscale8);
+    cv::Mat q0(shift_dft, cv::Rect(0, 0, cx, cy));   // 左上
+    cv::Mat q1(shift_dft, cv::Rect(cx, 0, cx, cy));  // 右上
+    cv::Mat q2(shift_dft, cv::Rect(0, cy, cx, cy));  // 左下
+    cv::Mat q3(shift_dft, cv::Rect(cx, cy, cx, cy)); // 右下
 
-    // 創建一個新的 QImage 對象，並設置其大小和格式
-    auto ifftImage = std::make_unique<QImage>(width, height, QImage::Format_RGB32);
+    cv::Mat tmp;
+    q0.copyTo(tmp);
+    q3.copyTo(q0);
+    tmp.copyTo(q3);
 
-    // 將灰度圖像轉換為 OpenCV 的 Mat 對象
-    cv::Mat grayMat(height, width, CV_8UC1, grayImage.bits(), grayImage.bytesPerLine());
+    q1.copyTo(tmp);
+    q2.copyTo(q1);
+    tmp.copyTo(q2);
 
     // 執行傅立葉逆變換
-    cv::Mat complexMat;
-    cv::dft(cv::Mat_<float>(grayMat), complexMat, cv::DFT_COMPLEX_OUTPUT | cv::DFT_INVERSE);
+    cv::Mat inverseMat;
+    cv::dft(shift_dft, inverseMat, cv::DFT_INVERSE | cv::DFT_REAL_OUTPUT | cv::DFT_SCALE);
+
+    // 歸一化
+    cv::normalize(inverseMat, inverseMat, 0, 255, cv::NORM_MINMAX);
 
     // 將結果轉換為 QImage
-    cv::Mat ifftMat;
-    cv::Mat planes[] = {cv::Mat::zeros(complexMat.size(), CV_32F), cv::Mat::zeros(complexMat.size(), CV_32F)};
-    cv::split(complexMat, planes);
-    cv::magnitude(planes[0], planes[1], ifftMat);
-    cv::normalize(ifftMat, ifftMat, 0, 1, cv::NORM_MINMAX);
+    int width = inverseMat.cols;
+    int height = inverseMat.rows;
+    auto inverseImage = std::make_unique<QImage>(width, height, QImage::Format_RGB32);
 
     for (int y = 0; y < height; ++y)
     {
         for (int x = 0; x < width; ++x)
         {
-            float value = ifftMat.at<float>(y, x);
-            int gray = static_cast<int>(value * 255);
-            ifftImage->setPixel(x, y, qRgb(gray, gray, gray));
+            int gray = cv::saturate_cast<int>(inverseMat.at<float>(y, x));
+            inverseImage->setPixel(x, y, qRgb(gray, gray, gray));
         }
     }
 
-    return ifftImage; // 返回傅立葉逆變換後的圖像
+    return inverseImage;
 }
+
+// 高斯噪聲
