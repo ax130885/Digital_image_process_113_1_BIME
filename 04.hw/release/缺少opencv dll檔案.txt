@@ -1,0 +1,4 @@
+opencv_world4100.dll
+opencv_world4100d.dll
+
+手動把這兩個檔案丟到此資料夾
