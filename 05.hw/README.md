@@ -28,7 +28,7 @@ Develop a program to display a grayscale image in pseudo-color. In your program,
 Design a user-friendly interface for flexible color table creation and multiple color tables should be provided for user selection. You may learn from popular softwares such as Photoshop or ImageJ for their interface to create a color table.
 
 開發一個程式以偽彩色顯示灰階影像。在你的程式中，你需要設計一個介面來同時顯示灰階和偽彩色圖像以進行比較。您還需要顯示色表（色條）及其對應的灰階。
-設計一個使用者友善的介面，靈活創建色表，並提供多種色表供使用者選擇。您可以藉鏡 Photoshop 或 ImageJ 等流行軟體的介面來建立色表。
+設計一個使用者友善的介面，靈活創建色表，並提供多種色表供使用者選擇。您可以藉由 Photoshop 或 ImageJ 等流行軟體的介面來建立色表。
 
 ## 【結果圖片】
 

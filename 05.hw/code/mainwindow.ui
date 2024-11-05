@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="ColorModeConvertion">
      <attribute name="title">
@@ -66,7 +66,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="LabImage"/>
+          <widget class="QGraphicsView" name="labImage"/>
          </item>
         </layout>
        </item>
@@ -80,7 +80,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="YUVImage"/>
+          <widget class="QGraphicsView" name="yuvImage"/>
          </item>
         </layout>
        </item>
@@ -94,7 +94,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="HSIImage"/>
+          <widget class="QGraphicsView" name="hsiImage"/>
          </item>
         </layout>
        </item>
@@ -108,7 +108,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="CMYImage"/>
+          <widget class="QGraphicsView" name="cmyImage"/>
          </item>
         </layout>
        </item>
@@ -136,7 +136,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="XYZImage"/>
+          <widget class="QGraphicsView" name="xyzImage"/>
          </item>
         </layout>
        </item>
@@ -152,7 +152,7 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>161</width>
+        <width>191</width>
         <height>51</height>
        </rect>
       </property>
@@ -164,13 +164,13 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>80</y>
         <width>1021</width>
-        <height>441</height>
+        <height>541</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
+       <item row="1" column="0">
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QLabel" name="label_2">
@@ -185,6 +185,54 @@
         </layout>
        </item>
        <item row="0" column="1">
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>ColorTable</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="redLabel">
+             <property name="text">
+              <string>RED: 0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="greenLabel">
+             <property name="text">
+              <string>GREEN: 0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="blueLabel">
+             <property name="text">
+              <string>BLUE: 0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QGraphicsView" name="colorTableImage"/>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="1">
         <layout class="QVBoxLayout" name="verticalLayout_10">
          <item>
           <widget class="QLabel" name="label_10">
@@ -194,24 +242,87 @@
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="PseudoColorImage"/>
+          <widget class="QGraphicsView" name="pseudoColorImage"/>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="1" column="1">
+          <widget class="QScrollBar" name="greenBar">
+           <property name="maximum">
+            <number>255</number>
+           </property>
+           <property name="value">
+            <number>50</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QScrollBar" name="blueBar">
+           <property name="maximum">
+            <number>255</number>
+           </property>
+           <property name="value">
+            <number>100</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QScrollBar" name="redBar">
+           <property name="maximum">
+            <number>255</number>
+           </property>
+           <property name="value">
+            <number>255</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="invertedAppearance">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>RED</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>GREEN</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>BLUE</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
       </layout>
-     </widget>
-     <widget class="QLabel" name="label_12">
-      <property name="geometry">
-       <rect>
-        <x>450</x>
-        <y>50</y>
-        <width>504</width>
-        <height>19</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>還要畫色條!!!</string>
-      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="KMeansSeg">
@@ -235,12 +346,26 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>80</y>
         <width>1021</width>
-        <height>441</height>
+        <height>541</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="1">
+        <layout class="QVBoxLayout" name="verticalLayout_11">
+         <item>
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>KMeansSeg(RGB)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGraphicsView" name="KMeansSegRGBImage"/>
+         </item>
+        </layout>
+       </item>
        <item row="0" column="0">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
@@ -255,19 +380,65 @@
          </item>
         </layout>
        </item>
-       <item row="0" column="1">
-        <layout class="QVBoxLayout" name="verticalLayout_11">
+       <item row="1" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout_12">
          <item>
-          <widget class="QLabel" name="label_11">
+          <widget class="QLabel" name="label_12">
            <property name="text">
-            <string>KMeansSeg</string>
+            <string>KMeansSeg(HSI)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="KMeansSegImage"/>
+          <widget class="QGraphicsView" name="KMeansSegHSIImage"/>
          </item>
         </layout>
+       </item>
+       <item row="1" column="1">
+        <layout class="QVBoxLayout" name="verticalLayout_14">
+         <item>
+          <widget class="QLabel" name="label_18">
+           <property name="text">
+            <string>KMeansSeg(Lab)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGraphicsView" name="KMeansSegLabImage"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>20</y>
+        <width>131</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>K (1~9) : </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="KspinBox">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>9</number>
+         </property>
+         <property name="value">
+          <number>2</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -280,7 +451,7 @@
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>24</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

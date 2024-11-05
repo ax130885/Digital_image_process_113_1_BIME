@@ -25,6 +25,20 @@ public:
 
 private slots:
 
+    void on_uploadfile_clicked();
+
+    void on_uploadfile_2_clicked();
+
+    void on_uploadfile_3_clicked();
+
+    void on_redBar_valueChanged(int value);
+
+    void on_greenBar_valueChanged(int value);
+
+    void on_blueBar_valueChanged(int value);
+
+    void on_KspinBox_valueChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     GeneralProcess gp;

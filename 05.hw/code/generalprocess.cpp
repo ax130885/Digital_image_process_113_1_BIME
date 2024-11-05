@@ -1312,13 +1312,13 @@ std::unique_ptr<QImage> GeneralProcess::rgb2lab(std::unique_ptr<QImage> &image)
 
             double l = (116.0 * yVal) - 16.0;
             double a = 500.0 * (xVal - yVal);
-            double b = 200.0 * (yVal - zVal);
+            double bVal = 200.0 * (yVal - zVal);
 
             // Store LAB values in the image
             QColor labColor;
             labColor.setRed(static_cast<int>(l));
             labColor.setGreen(static_cast<int>(a + 128));
-            labColor.setBlue(static_cast<int>(b + 128));
+            labColor.setBlue(static_cast<int>(bVal + 128));
             labImage->setPixelColor(x, y, labColor);
         }
     }
@@ -1368,4 +1368,113 @@ std::unique_ptr<QImage> GeneralProcess::rgb2yuv(std::unique_ptr<QImage> &image)
     }
 
     return yuvImage; // 返回 YUV 圖像
+}
+
+QVector<QColor> GeneralProcess::createPseudoColorTable(int red, int green, int blue)
+{
+    QVector<QColor> colorTable(256);
+    for (int i = 0; i < 256; ++i)
+    {
+        int r = (i * red) / 255;
+        int g = (i * green) / 255;
+        int b = (i * blue) / 255;
+        colorTable[i] = QColor(r, g, b);
+    }
+    return colorTable;
+}
+
+std::unique_ptr<QImage> GeneralProcess::createColorTableImage(const QVector<QColor> &colorTable)
+{
+    int width = 256;
+    int height = 20;
+    std::unique_ptr<QImage> colorTableImage = std::make_unique<QImage>(width, height, QImage::Format_RGB32);
+
+    for (int x = 0; x < width; ++x)
+    {
+        QColor color = colorTable[x];
+        for (int y = 0; y < height; ++y)
+        {
+            colorTableImage->setPixel(x, y, color.rgb());
+        }
+    }
+
+    return colorTableImage;
+}
+
+std::unique_ptr<QImage> GeneralProcess::applyPseudoColor(const std::unique_ptr<QImage> &image, const QVector<QColor> &colorTable)
+{
+    if (!image)
+        return std::unique_ptr<QImage>();
+
+    int width = image->width();
+    int height = image->height();
+    std::unique_ptr<QImage> pseudoColorImage = std::make_unique<QImage>(width, height, QImage::Format_RGB32);
+
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            int grayValue = qGray(image->pixel(x, y));
+            QColor color = colorTable[grayValue];
+            pseudoColorImage->setPixel(x, y, color.rgb());
+        }
+    }
+
+    return pseudoColorImage;
+}
+
+std::unique_ptr<QImage> GeneralProcess::kMeansSegmentation(std::unique_ptr<QImage> &image, int k)
+{
+    if (!image)
+    {
+        QMessageBox::critical(nullptr, "Error", "Invalid image pointer.");
+        return nullptr; // 返回 nullptr 表示錯誤
+    }
+
+    // 獲取圖片的寬度和高度
+    int width = image->width();
+    int height = image->height();
+
+    // 將圖像轉換為 OpenCV 的 Mat 對象
+    cv::Mat src(height, width, CV_8UC4, const_cast<uchar *>(image->bits()), image->bytesPerLine());
+
+    // 將圖像轉換為 3 通道的 BGR 格式
+    cv::Mat srcBGR;
+    cv::cvtColor(src, srcBGR, cv::COLOR_BGRA2BGR);
+
+    // 將圖像數據轉換為 2D 點集
+    cv::Mat data;
+    srcBGR.convertTo(data, CV_32F);
+    data = data.reshape(1, data.total());
+
+    // 執行 K-means 聚類
+    cv::Mat labels, centers;
+    cv::kmeans(data, k, labels, cv::TermCriteria(cv::TermCriteria::EPS + cv::TermCriteria::COUNT, 10, 1.0), 3, cv::KMEANS_PP_CENTERS, centers);
+
+    // 將聚類結果轉換為圖像
+    centers = centers.reshape(3, centers.rows);
+    data = data.reshape(3, data.rows);
+    cv::Mat segmented = cv::Mat::zeros(data.size(), data.type());
+
+    // 使用 OpenCV 的並行處理功能
+    cv::parallel_for_(cv::Range(0, data.rows), [&](const cv::Range &range)
+                      {
+        for (int i = range.start; i < range.end; ++i)
+        {
+            int clusterIdx = labels.at<int>(i);
+            segmented.at<cv::Vec3f>(i) = centers.at<cv::Vec3f>(clusterIdx);
+        } });
+
+    segmented = segmented.reshape(3, srcBGR.rows);
+    segmented.convertTo(segmented, CV_8U);
+
+    // 將結果轉換為 QImage
+    cv::Mat resultBGR;
+    cv::cvtColor(segmented, resultBGR, cv::COLOR_BGR2BGRA);
+    QImage resultImage(resultBGR.data, resultBGR.cols, resultBGR.rows, resultBGR.step, QImage::Format_ARGB32);
+
+    // 複製數據以避免內存問題
+    auto finalImage = std::make_unique<QImage>(resultImage.copy());
+
+    return finalImage;
 }

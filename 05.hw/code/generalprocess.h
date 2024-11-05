@@ -49,6 +49,14 @@ public:
     std::unique_ptr<QImage> rgb2lab(std::unique_ptr<QImage> &image);
     // rgb2yuv
     std::unique_ptr<QImage> rgb2yuv(std::unique_ptr<QImage> &image);
+    // 建立偽彩色表，根據傳入的 RGB 值生成一個色表。
+    QVector<QColor> createPseudoColorTable(int red, int green, int blue);
+    // 將偽彩色表轉換為 QImage，以便顯示或視覺化。
+    std::unique_ptr<QImage> createColorTableImage(const QVector<QColor> &colorTable);
+    // 將偽彩色表應用到灰階影像，生成偽彩色影像。
+    std::unique_ptr<QImage> applyPseudoColor(const std::unique_ptr<QImage> &image, const QVector<QColor> &colorTable);
+    // K-means segmentation
+    std::unique_ptr<QImage> kMeansSegmentation(std::unique_ptr<QImage> &image, int k);
 
 signals:
 
