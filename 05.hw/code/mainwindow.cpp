@@ -267,10 +267,8 @@ void MainWindow::on_uploadfile_3_clicked()
     // 取得設定的K值
     int k = ui->KspinBox->value();
 
-    // rgb2cmy
-    std::unique_ptr<QImage> cmyImage = gp.rgb2cmy(image);
     // k-means segmentation
-    std::unique_ptr<QImage> KMeansSegRGBImage = gp.kMeansSegmentation(cmyImage, k);
+    std::unique_ptr<QImage> KMeansSegRGBImage = gp.kMeansSegmentation(image, k);
     if (KMeansSegRGBImage)
     {
         show_image_on_grphics_view(KMeansSegRGBImage, ui->KMeansSegRGBImage);
