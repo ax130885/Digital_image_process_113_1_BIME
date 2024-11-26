@@ -1,16 +1,16 @@
 
-<!-- title: 影處HW5 -->
+<!-- title: 影處HW6 -->
 ---
-Title: 影處HW5  
+Title: 影處HW6  
 Student ID: R12631070  
 Name: 林育新  
 ---
 
 # Part 1. 
-Design a computer program for color model conversion. Your program should be able to display an image in RGB, CMY, HSI, XYZ, L*a*b*, YUV color planes. Check the following web link for more information about color model conversion.
+Design a computer program for geometric transformation of an image. Try to find the optimal geometric transformation to obtain the warped images shown below. Describe your approach as clearly as possible and show the resulting images. You may also challenge yourself by designing an interactive interface for more flexible geometric transformation.
 
-設計用於顏色模型轉換的電腦程式。您的程式應該能夠以 RGB、CMY、HSI、XYZ、L*a*b*、YUV 色彩平面顯示影像。有關顏色模型轉換的更多信息，請檢查以下 Web 連結。
-http://www.cs.rit.edu/~ncs/color/t_convert.html
+設計一個用於圖像幾何變換的電腦程式。嘗試找到最佳幾何變換以獲得如下所示的扭曲影像。盡可能清楚地描述您的方法並顯示結果圖像。您還可以透過設計互動式介面來挑戰自己，以實現更靈活的幾何變換。
+![alt text](image.png)
 
 ## 【結果圖片】
 
@@ -27,61 +27,61 @@ http://www.cs.rit.edu/~ncs/color/t_convert.html
 <br/>
 
 # Part 2. 
-Develop a program to display a grayscale image in pseudo-color. In your program, you need to design an interface to both display the grayscale and pseudo-color images for comparison. You also need to show the color table (color bar) with its corresponding grayscale.
-Design a user-friendly interface for flexible color table creation and multiple color tables should be provided for user selection. You may learn from popular softwares such as Photoshop or ImageJ for their interface to create a color table.
+The algorithm of image fusion using DWT is described in the following steps:
 
-開發一個程式以偽彩色顯示灰階影像。在你的程式中，你需要設計一個介面來同時顯示灰階和偽彩色圖像以進行比較。您還需要顯示色表（色條）及其對應的灰階。
-設計一個使用者友善的介面，靈活創建色表，並提供多種色表供使用者選擇。您可以藉由 Photoshop 或 ImageJ 等流行軟體的介面來建立色表。
+1. The size of images to be fused needs to be the same size and the resolution needs to be of power of two.
+2. The two dimensional Discrete Wavelet Transform (DWT) should be applied to the resized images.
+3. Fusion rule: The most used image fusion rule using wavelet transform is maximum selection, by comparing the DWT coefficients of the two (or more) images and select the maximum. While the lowpass subband is an approximation of the input image, the three detail subbands convey information about the detail parts in horizontal, vertical and diagonal directions. Different merging procedures will be applied to approximation and detail subbands. Lowpass subband will be merged using simple averaging operations since they both contain approximations of the source images, and the maximum selection rule is applied to detail subbands, as shown in the following figure.
+4. After selecting the fused low frequency and high frequency bands, fused image is reconstructed using the inverse DWT from on the subbands determined in step 3.
+
+![alt text](image-1.png)
+Implement an image fusion program applying the DWT method as described above.
+1. Test your program with the image sets provided in this homework and image sets you wish to test.
+2. Quantitatively and qualitatively compare and discuss the effect of the image fusion results using different scales of decomposition.
+
+使用DWT進行影像融合的演算法描述如下：
+1. 融合影像的大小需要相同，解析度需要為2的冪。
+2. 二維離散小波轉換（DWT）應該應用於調整大小的影像。
+3. 融合規則：使用小波轉換最常用的影像融合規則是最大值選擇，透過比較兩個（或多個）影像的DWT係數並選擇最大值。雖然低通子帶是輸入影像的近似，但三個細節子帶傳達有關水平、垂直和對角線方向的細節部分的訊息。不同的合併過程將應用於近似子帶和細節子帶。低通子帶將使用簡單的平均操作進行合併，因為它們都包含來源影像的近似值，並且最大選擇規則應用於細節子帶，如下圖所示。
+4. 選擇融合的低頻和高頻段後，使用步驟 3 中確定的子帶的逆 DWT 重建融合影像。
+
+如上所述，應用 DWT 方法實現影像融合程序。
+1. 使用本作業中提供的圖像集和您想要測試的圖像集來測試您的程式。
+2. 定量和定性地比較和討論使用不同尺度分解的影像融合結果的效果。
+
+
 
 ## 【結果圖片】
-| ![alt text](readme_figure/image-5.png) | ![alt text](readme_figure/image-6.png) |
-| :------------------------------------: | :------------------------------------: |
 
-| ![alt text](readme_figure/image-7.png) | ![alt text](readme_figure/image-8.png) |
-| :------------------------------------: | :------------------------------------: |
 
 <br/>
 
 # Part 3. 
-In this assignment, you will practice image segmentation by color clustering, using the k-means algorithm. Your tasks are as follows:
-1. Search the internet to study the k-means algorithm.
-2. Implement a program for image segmentation based on color clustering approach. You may use OpenCV or MATLAB functions for k-means algorithm or you may develop your own function.
-3. Test your program with the accompanied images with various levels of complexity. Compare and discuss color segmentation results using different k values of the k-means algorithm.
-4. Compare the color segmentation results using RGB, HSI, and L*a*b* color planes (using k = 2).
+You are given a digital image and your task is to perform regional segmentation using a superpixel method. Superpixels are compact, perceptually meaningful regions that can be used as an intermediate step for more advanced image processing tasks. Your goal is to group similar pixels together to form these superpixels and segment the image into regions.
 
+1. Choose an image of your preference (or use the accompanied sample image).
+2. Implement a superpixel algorithm using Simple Linear Iterative Clustering (SLIC) described in Section 10.5 of the textbook.
+3. Tune the algorithm's parameters (e.g., number of superpixels) for the best segmentation results. You may need to experiment with different parameter settings.
+4. Carry out superpixel segmentation on the chosen image and display the resulting superpixel regions. Ensure that you superimpose these regions onto the original image for visual representation, akin to the illustration in Figure 10.51 of the textbook.
+5. Provide a written explanation of the superpixel algorithm you used, the chosen parameters, and the results of your segmentation. Discuss the strengths and weaknesses of your method.
+6. Compare and contrast your superpixel-based segmentation with a traditional method, such as K-means clustering, in terms of computational efficiency and quality of segmentation.
 
-在本作業中，您將使用 k 均值演算法透過色彩聚類練習影像分割。你的任務如下： 
-1. 上網搜尋k-means演算法。
-2. 實作基於顏色聚類方法的影像分割程序。您可以使用 OpenCV 或 MATLAB 函數來實作 k-means 演算法，也可以發展自己的函數。
-3. 使用具有不同複雜程度的隨附影像來測試您的程式。比較並討論使用 k-means 演算法的不同 k 值的顏色分割結果。
-4. 比較使用 RGB、HSI 和 L*a*b* 色彩平面（使用 k = 2）的顏色分割結果。
+![alt text](image-2.png)
+給你一張數位影像，你的任務是使用超像素方法執行區域分割。超像素是緊湊的、具有感知意義的區域，可用作更高級影像處理任務的中間步驟。您的目標是將相似的像素組合在一起以形成這些超像素並將影像分割成區域。
 
+1. 選擇您喜歡的圖像（或使用隨附的範例圖像）。
+2. 使用教科書第 10.5 節中所述的簡單線性迭代聚類 (SLIC) 實作超像素演算法。
+3. 調整演算法的參數（例如，超像素的數量）以獲得最佳分割結果。您可能需要嘗試不同的參數設定。
+4. 對所選影像進行超像素分割並顯示所得的超像素區域。確保將這些區域疊加到原始圖像上以進行視覺表示，類似於教科書圖 10.51 中的插圖。
+5. 提供您使用的超像素演算法、所選參數以及分割結果的書面說明。討論你的方法的優點和缺點。
+6. 在計算效率和分割品質方面將基於超像素的分割與傳統方法（例如 K 均值聚類）進行比較和對比。
 
 
 <!-- <br/> -->
 
 ## 【結果圖片】
-| ![alt text](readme_figure/image-9.png) | ![alt text](readme_figure/image-10.png) | ![alt text](readme_figure/image-11.png) |
-| :------------------------------------: | :-------------------------------------: | :-------------------------------------: |
-|                  K=2                   |                   K=4                   |                   K=8                   |
 
-| ![alt text](readme_figure/image-12.png) | ![alt text](readme_figure/image-13.png) | ![alt text](readme_figure/image-14.png) |
-| :-------------------------------------: | :-------------------------------------: | :-------------------------------------: |
-|                   K=2                   |                   K=4                   |                   K=8                   |
-
-| ![alt text](readme_figure/image-16.png) | ![alt text](readme_figure/image-17.png) | ![alt text](readme_figure/image-18.png) |
-| :-------------------------------------: | :-------------------------------------: | :-------------------------------------: |
-|                   K=2                   |                   K=4                   |                   K=8                   |
-
-| ![alt text](readme_figure/image-19.png) | ![alt text](readme_figure/image-20.png) | ![alt text](readme_figure/image-21.png) |
-| :-------------------------------------: | :-------------------------------------: | :-------------------------------------: |
-|                   K=2                   |                   K=4                   |                   K=8                   |
 
 ## 【結果討論】
-- 當 K 值較小時，影像會被分割成較大的區塊，能夠清楚地分辨出主要的輪廓和結構。然而，細節部分可能會被忽略。
-- 當 K 值較大時，影像會被分割成更多的區塊，能夠捕捉到更多的細節，影像的還原度更高，但可能會導致過度分割。
-- 使用 RGB 色彩平面進行分割的結果：保留最多細節，但這也代表分割的效果不佳。
-- 使用 HSI 色彩平面進行分割的結果：在K值=2時有最好的分割結果，能夠分割出圖形的輪廓，但無法適當的反應顏色的差異。**產生的結果近似於語意分割 (Semantic Segmentation)**。
-- 使用 L*a*b* 色彩平面進行分割的結果：在K值設定較大時有最好的分割結果，能夠較佳的反應出顏色間的差異。**產生的結果近似於實例分割 (Instance Segmentation)**。但在醫學影像這種灰階影像當中，因為顏色變化不明顯，因此很難觀察L*a*b* 後分割的差異。
 
 

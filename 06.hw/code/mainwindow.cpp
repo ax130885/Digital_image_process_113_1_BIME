@@ -56,39 +56,38 @@ void MainWindow::on_uploadfile_clicked()
     // 顯示原圖
     show_image_on_grphics_view(image, ui->originalImage);
 
-    // rgb2cmy
-    std::unique_ptr<QImage> cmyImage = gp.rgb2cmy(image);
-    if (cmyImage)
+    // 梯形幾何轉換
+    // 取得參數
+    double topBase = ui->topBaseSpinBox->value();       // 上底
+    double bottomBase = ui->bottomBaseSpinBox->value(); // 下底
+    double h = ui->heightSpinBox->value();              // 高
+    // 梯形幾何轉換
+    std::unique_ptr<QImage> trapezoidalGeometricTransformationImage = gp.trapezoidalGeometricTransformation(image, topBase, bottomBase, h);
+    if (trapezoidalGeometricTransformationImage)
     {
-        show_image_on_grphics_view(cmyImage, ui->cmyImage);
+        show_image_on_grphics_view(trapezoidalGeometricTransformationImage, ui->trapezoidalGeometricTransformationImage);
     }
 
-    // rgb2hsi
-    std::unique_ptr<QImage> hsiImage = gp.rgb2hsi(image);
-    if (hsiImage)
+    // 波浪幾何轉換
+    // 取得參數
+    double amplitude = ui->amplitudeSpinBox->value(); // 振幅
+    double frequency = ui->frequencySpinBox->value(); // 頻率
+    double phase = ui->phaseSpinBox->value();         // 相位
+    // 波浪幾何轉換
+    std::unique_ptr<QImage> wavyGeometricTransformationImage = gp.wavyGeometricTransformation(image, amplitude, frequency, phase);
+    if (wavyGeometricTransformationImage)
     {
-        show_image_on_grphics_view(hsiImage, ui->hsiImage);
+        show_image_on_grphics_view(wavyGeometricTransformationImage, ui->wavyGeometricTransformationImage);
     }
 
-    // rgb2xyz
-    std::unique_ptr<QImage> xyzImage = gp.rgb2xyz(image);
-    if (xyzImage)
+    // 圓形幾何轉換
+    // 取得參數
+    double radius = ui->radiusSpinBox->value(); // 半徑
+    // 圓形幾何轉換
+    std::unique_ptr<QImage> circularGeometricTransformationImage = gp.circularGeometricTransformation(image, radius);
+    if (circularGeometricTransformationImage)
     {
-        show_image_on_grphics_view(xyzImage, ui->xyzImage);
-    }
-
-    // rgb2lab
-    std::unique_ptr<QImage> labImage = gp.rgb2lab(image);
-    if (labImage)
-    {
-        show_image_on_grphics_view(labImage, ui->labImage);
-    }
-
-    // rgb2yuv
-    std::unique_ptr<QImage> yuvImage = gp.rgb2yuv(image);
-    if (yuvImage)
-    {
-        show_image_on_grphics_view(yuvImage, ui->yuvImage);
+        show_image_on_grphics_view(circularGeometricTransformationImage, ui->circularGeometricTransformationImage);
     }
 }
 
@@ -98,153 +97,77 @@ void MainWindow::on_uploadfile_2_clicked()
     GeneralProcess gp(this);
     SpecificProcess sp(this);
 
-    // 上傳檔案
-    image = gp.UploadFile(); // 使用 unique_ptr 接收返回值
+    // 上傳第一個檔案
+    auto image1 = gp.UploadFile(); // 使用 unique_ptr 接收返回值
 
-    // 如果 image 是 nullptr，則退出
-    if (!image)
+    // 如果 image1 是 nullptr，則退出
+    if (!image1)
     {
-        return; // 如果 image 是 nullptr，則退出
+        return; // 如果 image1 是 nullptr，則退出
     }
 
-    // 顯示原圖
-    show_image_on_grphics_view(image, ui->originalImage_2);
+    // 顯示第一張原圖
+    show_image_on_grphics_view(image1, ui->originalImage_2);
 
-    // 讀取bar設定的色表值
-    int red = ui->redBar->value();
-    int green = ui->greenBar->value();
-    int blue = ui->blueBar->value();
+    // 上傳第二個檔案
+    auto image2 = gp.UploadFile(); // 使用 unique_ptr 接收返回值
 
-    // 更改label顯示的色表值
-    ui->redLabel->setText("red: " + QString::number(red));
-    ui->greenLabel->setText("green: " + QString::number(green));
-    ui->blueLabel->setText("blue: " + QString::number(blue));
-
-    // 建立偽彩色表
-    QVector<QColor> colorTable = gp.createPseudoColorTable(red, green, blue);
-
-    // 繪製偽彩色影像
-    std::unique_ptr<QImage> pseudoColorImage = gp.applyPseudoColor(image, colorTable);
-    if (pseudoColorImage)
+    // 如果 image2 是 nullptr，則退出
+    if (!image2)
     {
-        show_image_on_grphics_view(pseudoColorImage, ui->pseudoColorImage);
+        return; // 如果 image2 是 nullptr，則退出
     }
 
-    // 繪製色表
-    std::unique_ptr<QImage> colorTableImage = gp.createColorTableImage(colorTable);
-    if (colorTableImage)
+    // 顯示第二張原圖
+    show_image_on_grphics_view(image2, ui->originalImage_3); // 假設 originalImage_3 是第二個 QGraphicsView 的名稱
+
+    // 使用小波轉換進行影像融合
+    // 取得參數
+    int level = ui->levelSpinBox->value(); // 層級
+    QString waveletType = "Haar";          // 小波類型
+    // 小波轉換
+    std::unique_ptr<QImage> imageFusionImage = gp.imageFusion(image1, image2, level, waveletType);
+    if (imageFusionImage)
     {
-        show_image_on_grphics_view(colorTableImage, ui->colorTableImage);
+        show_image_on_grphics_view(imageFusionImage, ui->imageFusionImage);
     }
 }
 
-void MainWindow::on_redBar_valueChanged(int value)
-{
-    // 如果 image 是 nullptr，則退出
-    if (!image)
-    {
-        return; // 如果 image 是 nullptr，則退出
-    }
+// void MainWindow::on_blueBar_valueChanged(int value)
+// {
+//     // 如果 image 是 nullptr，則退出
+//     if (!image)
+//     {
+//         return; // 如果 image 是 nullptr，則退出
+//     }
 
-    // 讀取bar設定的色表值
-    int red = ui->redBar->value();
-    int green = ui->greenBar->value();
-    int blue = ui->blueBar->value();
+//     // 讀取bar設定的色表值
+//     int red = ui->redBar->value();
+//     int green = ui->greenBar->value();
+//     int blue = ui->blueBar->value();
 
-    // 更改label顯示的色表值
-    ui->redLabel->setText("red: " + QString::number(red));
-    ui->greenLabel->setText("green: " + QString::number(green));
-    ui->blueLabel->setText("blue: " + QString::number(blue));
+//     // 更改label顯示的色表值
+//     ui->redLabel->setText("red: " + QString::number(red));
+//     ui->greenLabel->setText("green: " + QString::number(green));
+//     ui->blueLabel->setText("blue: " + QString::number(blue));
 
-    // 建立偽彩色表
-    QVector<QColor> colorTable = gp.createPseudoColorTable(red, green, blue);
+//     // 建立偽彩色表
+//     QVector<QColor> colorTable = gp.createPseudoColorTable(red, green, blue);
 
-    // 繪製偽彩色影像
-    std::unique_ptr<QImage> pseudoColorImage = gp.applyPseudoColor(image, colorTable);
-    if (pseudoColorImage)
-    {
-        show_image_on_grphics_view(pseudoColorImage, ui->pseudoColorImage);
-    }
+//     // 繪製偽彩色影像
+//     std::unique_ptr<QImage> pseudoColorImage = gp.applyPseudoColor(image, colorTable);
+//     if (pseudoColorImage)
+//     {
+//         show_image_on_grphics_view(pseudoColorImage, ui->pseudoColorImage);
+//     }
 
-    // 繪製色表
-    std::unique_ptr<QImage> colorTableImage = gp.createColorTableImage(colorTable);
-    if (colorTableImage)
-    {
-        show_image_on_grphics_view(colorTableImage, ui->colorTableImage);
-    }
-}
-
-void MainWindow::on_greenBar_valueChanged(int value)
-{
-    // 如果 image 是 nullptr，則退出
-    if (!image)
-    {
-        return; // 如果 image 是 nullptr，則退出
-    }
-
-    // 讀取bar設定的色表值
-    int red = ui->redBar->value();
-    int green = ui->greenBar->value();
-    int blue = ui->blueBar->value();
-
-    // 更改label顯示的色表值
-    ui->redLabel->setText("red: " + QString::number(red));
-    ui->greenLabel->setText("green: " + QString::number(green));
-    ui->blueLabel->setText("blue: " + QString::number(blue));
-
-    // 建立偽彩色表
-    QVector<QColor> colorTable = gp.createPseudoColorTable(red, green, blue);
-
-    // 繪製偽彩色影像
-    std::unique_ptr<QImage> pseudoColorImage = gp.applyPseudoColor(image, colorTable);
-    if (pseudoColorImage)
-    {
-        show_image_on_grphics_view(pseudoColorImage, ui->pseudoColorImage);
-    }
-
-    // 繪製色表
-    std::unique_ptr<QImage> colorTableImage = gp.createColorTableImage(colorTable);
-    if (colorTableImage)
-    {
-        show_image_on_grphics_view(colorTableImage, ui->colorTableImage);
-    }
-}
-
-void MainWindow::on_blueBar_valueChanged(int value)
-{
-    // 如果 image 是 nullptr，則退出
-    if (!image)
-    {
-        return; // 如果 image 是 nullptr，則退出
-    }
-
-    // 讀取bar設定的色表值
-    int red = ui->redBar->value();
-    int green = ui->greenBar->value();
-    int blue = ui->blueBar->value();
-
-    // 更改label顯示的色表值
-    ui->redLabel->setText("red: " + QString::number(red));
-    ui->greenLabel->setText("green: " + QString::number(green));
-    ui->blueLabel->setText("blue: " + QString::number(blue));
-
-    // 建立偽彩色表
-    QVector<QColor> colorTable = gp.createPseudoColorTable(red, green, blue);
-
-    // 繪製偽彩色影像
-    std::unique_ptr<QImage> pseudoColorImage = gp.applyPseudoColor(image, colorTable);
-    if (pseudoColorImage)
-    {
-        show_image_on_grphics_view(pseudoColorImage, ui->pseudoColorImage);
-    }
-
-    // 繪製色表
-    std::unique_ptr<QImage> colorTableImage = gp.createColorTableImage(colorTable);
-    if (colorTableImage)
-    {
-        show_image_on_grphics_view(colorTableImage, ui->colorTableImage);
-    }
-}
+//     // 繪製色表
+//     std::unique_ptr<QImage> colorTableImage = gp.createColorTableImage(colorTable);
+//     if (colorTableImage)
+//     {
+//         show_image_on_grphics_view(colorTableImage, ui->colorTableImage);
+//     }
+// }
 
 // prob3.
 void MainWindow::on_uploadfile_3_clicked()
@@ -262,70 +185,17 @@ void MainWindow::on_uploadfile_3_clicked()
     }
 
     // 顯示原圖
-    show_image_on_grphics_view(image, ui->originalimage_3);
+    show_image_on_grphics_view(image, ui->originalimage_4);
 
-    // 取得設定的K值
-    int k = ui->KspinBox->value();
-
-    // k-means segmentation
-    std::unique_ptr<QImage> KMeansSegRGBImage = gp.kMeansSegmentation(image, k);
-    if (KMeansSegRGBImage)
+    // Simple Linear Iterative Clustering (SLIC) 實作超像素區域分割
+    // 取得參數
+    int k = ui->KspinBox->value();             // 超像素數量
+    int m = ui->MspinBox->value();             // 超像素大小
+    int maxIter = ui->maxIterSpinBox->value(); // 最大迭代次數
+    // SLIC
+    std::unique_ptr<QImage> SLICImage = gp.SLIC(image, k, m, maxIter);
+    if (SLICImage)
     {
-        show_image_on_grphics_view(KMeansSegRGBImage, ui->KMeansSegRGBImage);
-    }
-
-    // rgb2hsi
-    std::unique_ptr<QImage> hsiImage = gp.rgb2hsi(image);
-    // k-means segmentation
-    std::unique_ptr<QImage> KMeansSegHSIImage = gp.kMeansSegmentation(hsiImage, k);
-    if (KMeansSegHSIImage)
-    {
-        show_image_on_grphics_view(KMeansSegHSIImage, ui->KMeansSegHSIImage);
-    }
-
-    // rgb2lab
-    std::unique_ptr<QImage> labImage = gp.rgb2lab(image);
-    // k-means segmentation
-    std::unique_ptr<QImage> KMeansSegLabImage = gp.kMeansSegmentation(labImage, k);
-    if (KMeansSegLabImage)
-    {
-        show_image_on_grphics_view(KMeansSegLabImage, ui->KMeansSegLabImage);
-    }
-}
-
-void MainWindow::on_KspinBox_valueChanged(int arg1)
-{
-    // 如果 image 是 nullptr，則退出
-    if (!image)
-    {
-        return; // 如果 image 是 nullptr，則退出
-    }
-
-    // 取得設定的K值
-    int k = ui->KspinBox->value();
-
-    // k-means segmentation
-    std::unique_ptr<QImage> KMeansSegRGBImage = gp.kMeansSegmentation(image, k);
-    if (KMeansSegRGBImage)
-    {
-        show_image_on_grphics_view(KMeansSegRGBImage, ui->KMeansSegRGBImage);
-    }
-
-    // rgb2hsi
-    std::unique_ptr<QImage> hsiImage = gp.rgb2hsi(image);
-    // k-means segmentation
-    std::unique_ptr<QImage> KMeansSegHSIImage = gp.kMeansSegmentation(hsiImage, k);
-    if (KMeansSegHSIImage)
-    {
-        show_image_on_grphics_view(KMeansSegHSIImage, ui->KMeansSegHSIImage);
-    }
-
-    // rgb2lab
-    std::unique_ptr<QImage> labImage = gp.rgb2lab(image);
-    // k-means segmentation
-    std::unique_ptr<QImage> KMeansSegLabImage = gp.kMeansSegmentation(labImage, k);
-    if (KMeansSegLabImage)
-    {
-        show_image_on_grphics_view(KMeansSegLabImage, ui->KMeansSegLabImage);
+        show_image_on_grphics_view(SLICImage, ui->SLICImage);
     }
 }

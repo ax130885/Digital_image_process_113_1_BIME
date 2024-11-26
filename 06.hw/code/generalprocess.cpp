@@ -1478,3 +1478,334 @@ std::unique_ptr<QImage> GeneralProcess::kMeansSegmentation(std::unique_ptr<QImag
 
     return finalImage;
 }
+
+// 梯形幾何變換
+std::unique_ptr<QImage> GeneralProcess::trapezoidalGeometricTransformation(std::unique_ptr<QImage> &image, double topBase, double bottomBase, double height)
+{
+    if (!image)
+    {
+        return std::unique_ptr<QImage>();
+    }
+
+    int image_width = image->width();
+    int image_height = image->height();
+
+    // 將 topBase 和 bottomBase 從 0~1 的範圍轉換為實際像素值
+    double topBasePixels = topBase * image_width;
+    double bottomBasePixels = bottomBase * image_width;
+
+    std::unique_ptr<QImage> transformedImage = std::make_unique<QImage>(image_width, image_height, image->format());
+
+    QPainter painter(transformedImage.get());
+    QTransform transform;
+
+    // 設定梯形變換的參數 (topBasePixels, bottomBasePixels, height) = (上底, 下底, 高)
+    transform.setMatrix(1, topBasePixels / image_width, 0,
+                        bottomBasePixels / image_height, 1, 0,
+                        0, height, 1);
+
+    painter.setTransform(transform);
+    painter.drawImage(0, 0, *image);
+    painter.end();
+
+    return transformedImage;
+}
+
+// 波浪幾何變換
+std::unique_ptr<QImage> GeneralProcess::wavyGeometricTransformation(std::unique_ptr<QImage> &image, double amplitude, double frequency, double phase)
+{
+    if (!image)
+    {
+        return std::unique_ptr<QImage>();
+    }
+
+    int width = image->width();
+    int height = image->height();
+    std::unique_ptr<QImage> transformedImage = std::make_unique<QImage>(width, height, image->format());
+
+    // 使用 QImage 進行像素操作
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            // 計算波動變換後的 x 座標
+            int newX = x + static_cast<int>(amplitude * sin(frequency * y + phase));
+            if (newX >= 0 && newX < width)
+            {
+                transformedImage->setPixel(newX, y, image->pixel(x, y));
+            }
+        }
+    }
+
+    return transformedImage;
+}
+
+// 圓形幾何變換
+std::unique_ptr<QImage> GeneralProcess::circularGeometricTransformation(std::unique_ptr<QImage> &image, double normalizedRadius)
+{
+    if (!image)
+    {
+        return std::unique_ptr<QImage>();
+    }
+
+    int width = image->width();
+    int height = image->height();
+    std::unique_ptr<QImage> transformedImage = std::make_unique<QImage>(width, height, image->format());
+
+    // 計算影像中心點
+    int centerX = width / 2;
+    int centerY = height / 2;
+
+    // 將正規化的半徑轉換為實際像素值
+    double radius = normalizedRadius * std::min(width, height) / 2;
+
+    // 使用 QImage 進行像素操作
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            // 計算到中心點的距離
+            double dx = x - centerX;
+            double dy = y - centerY;
+            double distance = sqrt(dx * dx + dy * dy);
+
+            // 計算圓形變換後的座標
+            if (distance < radius)
+            {
+                double angle = atan2(dy, dx);
+                int newX = static_cast<int>(centerX + distance * cos(angle));
+                int newY = static_cast<int>(centerY + distance * sin(angle));
+                if (newX >= 0 && newX < width && newY >= 0 && newY < height)
+                {
+                    transformedImage->setPixel(newX, newY, image->pixel(x, y));
+                }
+            }
+        }
+    }
+
+    return transformedImage;
+}
+
+void GeneralProcess::dwt(const cv::Mat &src, cv::Mat &low, cv::Mat &highH, cv::Mat &highV, cv::Mat &highD, int level)
+{
+    cv::Mat current = src.clone();
+    for (int i = 0; i < level; ++i)
+    {
+        cv::Mat temp;
+        cv::pyrDown(current, low);
+        cv::pyrUp(low, temp);
+
+        highH = current - temp;
+
+        cv::transpose(current, temp);
+        cv::pyrDown(temp, low);
+        cv::pyrUp(low, temp);
+        cv::transpose(temp, temp);
+
+        highV = current - temp;
+
+        highD = highH + highV;
+
+        current = low.clone();
+    }
+}
+
+void GeneralProcess::idwt(const cv::Mat &low, const cv::Mat &highH, const cv::Mat &highV, const cv::Mat &highD, cv::Mat &dst, int level)
+{
+    cv::Mat current = low.clone();
+    for (int i = 0; i < level; ++i)
+    {
+        cv::Mat temp;
+        cv::pyrUp(current, dst);
+        dst += highH + highV + highD;
+
+        current = dst.clone();
+    }
+}
+
+std::unique_ptr<QImage> GeneralProcess::imageFusion(std::unique_ptr<QImage> &image1, std::unique_ptr<QImage> &image2, int level, QString waveletType)
+{
+    if (!image1 || !image2 || image1->size() != image2->size())
+    {
+        QMessageBox::critical(nullptr, "Error", "Invalid image pointers.");
+        return std::unique_ptr<QImage>();
+    }
+
+    if (image1->size() != image2->size())
+    {
+        QMessageBox::critical(nullptr, "Error", "兩張影像尺寸不同");
+        return std::unique_ptr<QImage>();
+    }
+
+    int width = image1->width();
+    int height = image1->height();
+
+    // 確保影像大小為 2 的次方
+    width = 1 << static_cast<int>(std::log2(width));
+    height = 1 << static_cast<int>(std::log2(height));
+    cv::Mat mat1(image1->height(), image1->width(), CV_8UC4, image1->bits(), image1->bytesPerLine());
+    cv::Mat mat2(image2->height(), image2->width(), CV_8UC4, image2->bits(), image2->bytesPerLine());
+    cv::resize(mat1, mat1, cv::Size(width, height));
+    cv::resize(mat2, mat2, cv::Size(width, height));
+
+    // 將影像轉換為灰度圖
+    cv::Mat gray1, gray2;
+    cv::cvtColor(mat1, gray1, cv::COLOR_BGRA2GRAY);
+    cv::cvtColor(mat2, gray2, cv::COLOR_BGRA2GRAY);
+
+    // 使用小波變換進行 DWT
+    cv::Mat low1, highH1, highV1, highD1;
+    cv::Mat low2, highH2, highV2, highD2;
+    dwt(gray1, low1, highH1, highV1, highD1, level);
+    dwt(gray2, low2, highH2, highV2, highD2, level);
+
+    // 融合規則：低頻部分取平均，高頻部分取最大值
+    cv::Mat fusedLow = (low1 + low2) / 2;
+    cv::Mat fusedHighH = cv::max(highH1, highH2);
+    cv::Mat fusedHighV = cv::max(highV1, highV2);
+    cv::Mat fusedHighD = cv::max(highD1, highD2);
+
+    // 使用逆小波變換重建影像
+    cv::Mat fusedGray;
+    idwt(fusedLow, fusedHighH, fusedHighV, fusedHighD, fusedGray, level);
+
+    // 將灰度圖轉換回彩色圖
+    cv::Mat fusedMat;
+    cv::cvtColor(fusedGray, fusedMat, cv::COLOR_GRAY2BGRA);
+
+    // 將 OpenCV Mat 轉換回 QImage
+    QImage resultImage(fusedMat.data, fusedMat.cols, fusedMat.rows, fusedMat.step, QImage::Format_ARGB32);
+    return std::make_unique<QImage>(resultImage.copy());
+}
+
+// 計算歐幾里得距離
+double GeneralProcess::euclideanDistance(const cv::Vec3b &p1, const cv::Vec3b &p2)
+{
+    return std::sqrt(std::pow(p1[0] - p2[0], 2) + std::pow(p1[1] - p2[1], 2) + std::pow(p1[2] - p2[2], 2));
+}
+
+// SLIC 超像素分割
+std::unique_ptr<QImage> GeneralProcess::SLIC(std::unique_ptr<QImage> &image, int K, int m, int maxIter)
+{
+    if (!image)
+    {
+        return std::unique_ptr<QImage>();
+    }
+
+    // 將 QImage 轉換為 OpenCV Mat 格式
+    cv::Mat mat(image->height(), image->width(), CV_8UC4, const_cast<uchar *>(image->bits()), image->bytesPerLine());
+
+    // 將影像轉換為 BGR 格式
+    cv::Mat matBGR;
+    cv::cvtColor(mat, matBGR, cv::COLOR_BGRA2BGR);
+
+    int width = matBGR.cols;
+    int height = matBGR.rows;
+    int N = width * height;
+    int S = std::sqrt(N / K);
+
+    // 初始化超像素中心
+    std::vector<cv::Vec3b> centers(K);
+    std::vector<cv::Point> centerPoints(K);
+    std::vector<int> clusterSize(K, 0);
+    std::vector<double> distances(N, std::numeric_limits<double>::max());
+    std::vector<int> labels(N, -1);
+
+    for (int k = 0; k < K; ++k)
+    {
+        int x = (k % (width / S)) * S + S / 2;
+        int y = (k / (width / S)) * S + S / 2;
+        centers[k] = matBGR.at<cv::Vec3b>(y, x);
+        centerPoints[k] = cv::Point(x, y);
+    }
+
+    // 迭代更新超像素
+    for (int iter = 0; iter < maxIter; ++iter)
+    {
+        for (int k = 0; k < K; ++k)
+        {
+            int cx = centerPoints[k].x;
+            int cy = centerPoints[k].y;
+
+            for (int dy = -S; dy <= S; ++dy)
+            {
+                for (int dx = -S; dx <= S; ++dx)
+                {
+                    int x = cx + dx;
+                    int y = cy + dy;
+
+                    if (x >= 0 && x < width && y >= 0 && y < height)
+                    {
+                        double d = euclideanDistance(matBGR.at<cv::Vec3b>(cy, cx), matBGR.at<cv::Vec3b>(y, x));
+                        double D = std::sqrt(d * d + m * m * (dx * dx + dy * dy) / (S * S));
+
+                        int idx = y * width + x;
+                        if (D < distances[idx])
+                        {
+                            distances[idx] = D;
+                            labels[idx] = k;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 更新中心點
+        std::fill(centers.begin(), centers.end(), cv::Vec3b(0, 0, 0));
+        std::fill(centerPoints.begin(), centerPoints.end(), cv::Point(0, 0));
+        std::fill(clusterSize.begin(), clusterSize.end(), 0);
+
+        for (int y = 0; y < height; ++y)
+        {
+            for (int x = 0; x < width; ++x)
+            {
+                int idx = y * width + x;
+                int k = labels[idx];
+
+                if (k != -1)
+                {
+                    centers[k] += matBGR.at<cv::Vec3b>(y, x);
+                    centerPoints[k] += cv::Point(x, y);
+                    clusterSize[k]++;
+                }
+            }
+        }
+
+        for (int k = 0; k < K; ++k)
+        {
+            if (clusterSize[k] > 0)
+            {
+                centers[k] /= clusterSize[k];
+                centerPoints[k].x /= clusterSize[k];
+                centerPoints[k].y /= clusterSize[k];
+            }
+        }
+    }
+
+    // 繪製超像素邊界
+    cv::Mat mask = cv::Mat::zeros(height, width, CV_8UC1);
+    for (int y = 1; y < height - 1; ++y)
+    {
+        for (int x = 1; x < width - 1; ++x)
+        {
+            int idx = y * width + x;
+            if (labels[idx] != labels[idx - 1] || labels[idx] != labels[idx + 1] ||
+                labels[idx] != labels[idx - width] || labels[idx] != labels[idx + width])
+            {
+                mask.at<uchar>(y, x) = 255;
+            }
+        }
+    }
+
+    matBGR.setTo(cv::Scalar(0, 0, 255), mask);
+
+    // 將 OpenCV Mat 轉換回 QImage
+    cv::Mat matBGRA;
+    cv::cvtColor(matBGR, matBGRA, cv::COLOR_BGR2BGRA);
+    QImage resultImage(matBGRA.data, matBGRA.cols, matBGRA.rows, matBGRA.step, QImage::Format_ARGB32);
+
+    // 複製數據以避免記憶體問題
+    auto finalImage = std::make_unique<QImage>(resultImage.copy());
+
+    return finalImage;
+}

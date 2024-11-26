@@ -10,7 +10,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
-
+// <opencv2/ximgproc.hpp>
 class GeneralProcess : public QObject
 {
     Q_OBJECT
@@ -57,6 +57,26 @@ public:
     std::unique_ptr<QImage> applyPseudoColor(const std::unique_ptr<QImage> &image, const QVector<QColor> &colorTable);
     // K-means segmentation
     std::unique_ptr<QImage> kMeansSegmentation(std::unique_ptr<QImage> &image, int k);
+
+    // HW6
+    // trapezoidal geometric transformation (梯形幾何轉換)
+    std::unique_ptr<QImage> trapezoidalGeometricTransformation(std::unique_ptr<QImage> &image, double topBase, double bottomBase, double h); // topBase: 上底, bottomBase: 下底, h: 高
+    // wavy geometric transformation (波浪幾何轉換)
+    std::unique_ptr<QImage> wavyGeometricTransformation(std::unique_ptr<QImage> &image, double amplitude, double frequency, double phase);
+    // circular geometric transformation (圓形幾何轉換)
+    std::unique_ptr<QImage> circularGeometricTransformation(std::unique_ptr<QImage> &image, double radius);
+
+    // 小波轉換
+    void dwt(const cv::Mat &src, cv::Mat &low, cv::Mat &highH, cv::Mat &highV, cv::Mat &highD, int level);
+    // 逆小波轉換
+    void idwt(const cv::Mat &low, const cv::Mat &highH, const cv::Mat &highV, const cv::Mat &highD, cv::Mat &dst, int level);
+    // 使用小波轉換進行影像融合
+    std::unique_ptr<QImage> imageFusion(std::unique_ptr<QImage> &image1, std::unique_ptr<QImage> &image2, int level, QString waveletType = "Haar");
+
+    // 計算歐幾里得距離
+    double euclideanDistance(const cv::Vec3b &p1, const cv::Vec3b &p2);
+    // Simple Linear Iterative Clustering (SLIC) 實作超像素區域分割
+    std::unique_ptr<QImage> SLIC(std::unique_ptr<QImage> &image, int K, int m = 10, int maxIter = 10); // K: 超像素區域數量, m: 超像素區域大小, maxIter: 最大迭代次數
 
 signals:
 

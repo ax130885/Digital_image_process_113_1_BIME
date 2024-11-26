@@ -23,15 +23,15 @@
       <x>20</x>
       <y>10</y>
       <width>1041</width>
-      <height>661</height>
+      <height>691</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
-    <widget class="QWidget" name="ColorModeConvertion">
+    <widget class="QWidget" name="GeometricTransformation">
      <attribute name="title">
-      <string>ColorModeConvertion</string>
+      <string>GeometricTransformation</string>
      </attribute>
      <widget class="QPushButton" name="uploadfile">
       <property name="geometry">
@@ -50,23 +50,37 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>90</y>
-        <width>1021</width>
-        <height>531</height>
+        <y>260</y>
+        <width>1011</width>
+        <height>381</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <item>
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>梯形</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGraphicsView" name="trapezoidalGeometricTransformationImage"/>
+         </item>
+        </layout>
+       </item>
        <item row="1" column="1">
         <layout class="QVBoxLayout" name="verticalLayout_8">
          <item>
           <widget class="QLabel" name="label_8">
            <property name="text">
-            <string>Lab*</string>
+            <string>波浪</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="labImage"/>
+          <widget class="QGraphicsView" name="wavyGeometricTransformationImage"/>
          </item>
         </layout>
        </item>
@@ -75,77 +89,216 @@
          <item>
           <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>YUV</string>
+            <string>圓形</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="yuvImage"/>
+          <widget class="QGraphicsView" name="circularGeometricTransformationImage"/>
          </item>
         </layout>
        </item>
        <item row="0" column="2">
-        <layout class="QVBoxLayout" name="verticalLayout_6">
-         <item>
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>HSI</string>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="radiusSpinBox">
+           <property name="minimum">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.800000000000000</double>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QGraphicsView" name="hsiImage"/>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_24">
+           <property name="text">
+            <string>半徑 (比例)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
        <item row="0" column="1">
-        <layout class="QVBoxLayout" name="verticalLayout_5">
-         <item>
-          <widget class="QLabel" name="label_5">
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_21">
            <property name="text">
-            <string>CMY</string>
+            <string>震幅 (pixel)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QGraphicsView" name="cmyImage"/>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_22">
+           <property name="text">
+            <string>頻率 (rad/pixel)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_23">
+           <property name="text">
+            <string>相位 (rad) (0~6.28(2pi))</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="amplitudeSpinBox">
+           <property name="value">
+            <double>10.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QDoubleSpinBox" name="frequencySpinBox">
+           <property name="value">
+            <double>10.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="phaseSpinBox">
+           <property name="maximum">
+            <double>6.280000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.314000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.000000000000000</double>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
        <item row="0" column="0">
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QLabel" name="label">
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_17">
            <property name="text">
-            <string>Original (RGB)</string>
+            <string>上底 (比例)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QGraphicsView" name="originalImage"/>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="0">
-        <layout class="QVBoxLayout" name="verticalLayout_7">
-         <item>
-          <widget class="QLabel" name="label_7">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_19">
            <property name="text">
-            <string>XYZ</string>
+            <string>下底 (比例)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QGraphicsView" name="xyzImage"/>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_20">
+           <property name="text">
+            <string>高 (比例)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="topBaseSpinBox">
+           <property name="minimum">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.800000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QDoubleSpinBox" name="bottomBaseSpinBox">
+           <property name="minimum">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.700000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="heightSpinBox">
+           <property name="minimum">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.900000000000000</double>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>690</x>
+        <y>10</y>
+        <width>331</width>
+        <height>231</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Original</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGraphicsView" name="originalImage"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
-    <widget class="QWidget" name="PseudoColor">
+    <widget class="QWidget" name="DWTfusion">
      <attribute name="title">
-      <string>PseudoColor</string>
+      <string>DWTfusion</string>
      </attribute>
      <widget class="QPushButton" name="uploadfile_2">
       <property name="geometry">
@@ -175,7 +328,7 @@
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Original imamge</string>
+            <string>image1</string>
            </property>
           </widget>
          </item>
@@ -189,46 +342,12 @@
          <item>
           <widget class="QLabel" name="label_14">
            <property name="text">
-            <string>ColorTable</string>
+            <string>融合結果</string>
            </property>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QLabel" name="redLabel">
-             <property name="text">
-              <string>RED: 0</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="greenLabel">
-             <property name="text">
-              <string>GREEN: 0</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="blueLabel">
-             <property name="text">
-              <string>BLUE: 0</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QGraphicsView" name="colorTableImage"/>
+          <widget class="QGraphicsView" name="imageFusionImage"/>
          </item>
         </layout>
        </item>
@@ -237,83 +356,34 @@
          <item>
           <widget class="QLabel" name="label_10">
            <property name="text">
-            <string>PseudoColor</string>
+            <string>image2</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="pseudoColorImage"/>
+          <widget class="QGraphicsView" name="originalImage_3"/>
          </item>
         </layout>
        </item>
        <item row="0" column="0">
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="1" column="1">
-          <widget class="QScrollBar" name="greenBar">
-           <property name="maximum">
-            <number>255</number>
-           </property>
-           <property name="value">
-            <number>50</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QScrollBar" name="blueBar">
-           <property name="maximum">
-            <number>255</number>
-           </property>
-           <property name="value">
-            <number>100</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
+        <layout class="QGridLayout" name="gridLayout_8">
          <item row="0" column="1">
-          <widget class="QScrollBar" name="redBar">
+          <widget class="QDoubleSpinBox" name="levelSpinBox">
            <property name="maximum">
-            <number>255</number>
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
            </property>
            <property name="value">
-            <number>255</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="invertedAppearance">
-            <bool>false</bool>
+            <double>0.800000000000000</double>
            </property>
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QLabel" name="label_13">
+          <widget class="QLabel" name="label_25">
            <property name="text">
-            <string>RED</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_15">
-           <property name="text">
-            <string>GREEN</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_16">
-           <property name="text">
-            <string>BLUE</string>
+            <string>level </string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -325,9 +395,9 @@
       </layout>
      </widget>
     </widget>
-    <widget class="QWidget" name="KMeansSeg">
+    <widget class="QWidget" name="SLICseg">
      <attribute name="title">
-      <string>KMeansSeg</string>
+      <string>SLICseg</string>
      </attribute>
      <widget class="QPushButton" name="uploadfile_3">
       <property name="geometry">
@@ -352,21 +422,24 @@
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="1">
-        <layout class="QVBoxLayout" name="verticalLayout_11">
+       <item row="1" column="2">
+        <layout class="QVBoxLayout" name="verticalLayout_14">
          <item>
-          <widget class="QLabel" name="label_11">
+          <widget class="QLabel" name="label_18">
            <property name="text">
-            <string>KMeansSeg(RGB)</string>
+            <string>SegResult</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="KMeansSegRGBImage"/>
+          <widget class="QGraphicsView" name="SLICImage"/>
          </item>
         </layout>
        </item>
-       <item row="0" column="0">
+       <item row="1" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout_12"/>
+       </item>
+       <item row="1" column="1">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QLabel" name="label_3">
@@ -376,69 +449,76 @@
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="originalimage_3"/>
+          <widget class="QGraphicsView" name="originalimage_4"/>
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
-        <layout class="QVBoxLayout" name="verticalLayout_12">
-         <item>
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>KMeansSeg(HSI)</string>
+       <item row="0" column="2">
+        <layout class="QGridLayout" name="gridLayout_9">
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="KspinBox">
+           <property name="minimum">
+            <number>100</number>
+           </property>
+           <property name="maximum">
+            <number>1000</number>
+           </property>
+           <property name="singleStep">
+            <number>100</number>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QGraphicsView" name="KMeansSegHSIImage"/>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="1">
-        <layout class="QVBoxLayout" name="verticalLayout_14">
-         <item>
-          <widget class="QLabel" name="label_18">
-           <property name="text">
-            <string>KMeansSeg(Lab)</string>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="MspinBox">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>40</number>
+           </property>
+           <property name="value">
+            <number>10</number>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QGraphicsView" name="KMeansSegLabImage"/>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_27">
+           <property name="text">
+            <string>m</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="maxIterSpinBox">
+           <property name="value">
+            <number>10</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_28">
+           <property name="text">
+            <string>max_iter</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_26">
+           <property name="text">
+            <string>K</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
          </item>
         </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="horizontalLayoutWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>20</y>
-        <width>131</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>K (1~9) : </string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="KspinBox">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>9</number>
-         </property>
-         <property name="value">
-          <number>2</number>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -451,7 +531,7 @@
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>20</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
