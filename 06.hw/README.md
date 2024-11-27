@@ -10,11 +10,28 @@ Name: 林育新
 Design a computer program for geometric transformation of an image. Try to find the optimal geometric transformation to obtain the warped images shown below. Describe your approach as clearly as possible and show the resulting images. You may also challenge yourself by designing an interactive interface for more flexible geometric transformation.
 
 設計一個用於圖像幾何變換的電腦程式。嘗試找到最佳幾何變換以獲得如下所示的扭曲影像。盡可能清楚地描述您的方法並顯示結果圖像。您還可以透過設計互動式介面來挑戰自己，以實現更靈活的幾何變換。
-![alt text](image.png)
+<div align="center">
+    <img src="readme_figure/image.png" alt="alt text">
+</div>
 
 ## 【結果圖片】
-![alt text](image-3.png)
-![alt text](image-4.png)
+<div align="center">
+    <img src="readme_figure/image-3.png" alt="alt text">
+    <p>梯形: x=0.8, y=0.7</p>
+    <p>波浪: 震幅=60, 頻率0.003 相位=2*pi</p>
+</div>
+<div align="center">
+    <img src="readme_figure/image-4.png" alt="alt text">
+        <p>梯形: x=0.6, y=1.0</p>
+    <p>波浪: 震幅=99.99, 頻率0.005 相位=0.63</p>
+</div>
+
+## 【結果討論】
+1. Trapezoidal Transformation 梯形幾何變換，使得某些部分被擠壓或拉伸。 
+   實作中我添加了x y的縮放比例可供調整。 
+2. Wavy Transformation 是波浪幾何變換，這樣的轉換會在圖像中引入波浪效果，使圖像呈現波動的外觀。  
+   實作中我添加的振幅、頻率、相位等三個參數，提供更細緻的波浪變換。
+3. Circular Transformation 圓形幾何變換，是透過將原始位置轉換到以圓心為中心的圖上，呈現類似於凸面鏡的效果。  
 
 <br/>
 
@@ -26,7 +43,9 @@ The algorithm of image fusion using DWT is described in the following steps:
 3. Fusion rule: The most used image fusion rule using wavelet transform is maximum selection, by comparing the DWT coefficients of the two (or more) images and select the maximum. While the lowpass subband is an approximation of the input image, the three detail subbands convey information about the detail parts in horizontal, vertical and diagonal directions. Different merging procedures will be applied to approximation and detail subbands. Lowpass subband will be merged using simple averaging operations since they both contain approximations of the source images, and the maximum selection rule is applied to detail subbands, as shown in the following figure.
 4. After selecting the fused low frequency and high frequency bands, fused image is reconstructed using the inverse DWT from on the subbands determined in step 3.
 
-![alt text](image-1.png)
+<div align="center">
+    <img src="readme_figure/image-1.png" alt="alt text">
+</div>
 Implement an image fusion program applying the DWT method as described above.
 1. Test your program with the image sets provided in this homework and image sets you wish to test.
 2. Quantitatively and qualitatively compare and discuss the effect of the image fusion results using different scales of decomposition.
@@ -44,12 +63,38 @@ Implement an image fusion program applying the DWT method as described above.
 
 
 ## 【結果圖片】
-![alt text](image-5.png)
-![alt text](image-6.png)
-![alt text](image-7.png)
-![alt text](image-8.png)
-![alt text](image-9.png)
+<div align="center">
+    <img src="readme_figure/image-5.png" alt="alt text">
+    <p>大腦, level=1</p>
+</div>
+<div align="center">
+    <img src="readme_figure/image-6.png" alt="alt text">
+    <p>大腦, level=3</p>
+</div>
+<div align="center">
+    <img src="readme_figure/image-7.png" alt="alt text">
+    <p>書房, level=1</p>
+</div>
+<div align="center">
+    <img src="readme_figure/image-8.png" alt="alt text">
+    <p>書房, level=5</p>
+</div>
+<div align="center">
+    <img src="readme_figure/image-9.png" alt="alt text">
+    <p>多焦點, level=1</p>
+</div>
 <br/>
+
+## 【結果討論】
+- Level 較低（例如 1-2）：
+  - 保留更多高頻細節（例如邊緣、紋理）。
+  - 混合結果側重於細節清晰度。
+  - 低頻部分僅包含影像的基本結構或輪廓。
+
+- Level 較高（例如 3-4）：
+  - 高頻細節逐漸減少，更多著重於低頻結構（例如整體光影、形狀）。
+  - 混合結果更強調整體視覺一致性，但細節可能被平滑或弱化。
+  - 適合用於側重大尺度結構或背景融合的場景。
 
 # Part 3. 
 You are given a digital image and your task is to perform regional segmentation using a superpixel method. Superpixels are compact, perceptually meaningful regions that can be used as an intermediate step for more advanced image processing tasks. Your goal is to group similar pixels together to form these superpixels and segment the image into regions.
@@ -61,7 +106,10 @@ You are given a digital image and your task is to perform regional segmentation 
 5. Provide a written explanation of the superpixel algorithm you used, the chosen parameters, and the results of your segmentation. Discuss the strengths and weaknesses of your method.
 6. Compare and contrast your superpixel-based segmentation with a traditional method, such as K-means clustering, in terms of computational efficiency and quality of segmentation.
 
-![alt text](image-2.png)
+![alt text](readme_figure/image-2.png)
+<div align="center">
+    <img src="readme_figure/image-2.png" alt="alt text">
+</div>
 給你一張數位影像，你的任務是使用超像素方法執行區域分割。超像素是緊湊的、具有感知意義的區域，可用作更高級影像處理任務的中間步驟。您的目標是將相似的像素組合在一起以形成這些超像素並將影像分割成區域。
 
 1. 選擇您喜歡的圖像（或使用隨附的範例圖像）。
@@ -75,10 +123,31 @@ You are given a digital image and your task is to perform regional segmentation 
 <!-- <br/> -->
 
 ## 【結果圖片】
-![alt text](image-10.png)
-![alt text](image-11.png)
-![alt text](image-12.png)
-![alt text](image-13.png)
-## 【結果討論】
+<div align="center">
+    <img src="readme_figure/image-10.png" alt="alt text">
+    <p>K=20</p>
+</div>
+<div align="center">
+    <img src="readme_figure/image-11.png" alt="alt text">
+    <p>K=100</p>
+</div>
+<div align="center">
+    <img src="readme_figure/image-12.png" alt="alt text">
+    <p>K=500</p>
+</div>
+<div align="center">
+    <img src="readme_figure/image-13.png" alt="alt text">
+    <p>K=999</p>
+</div>
 
+## 【結果討論】
+- K 值較低（例如 50-100）：
+  - 生成較少的超像素，每個超像素覆蓋範圍較大。
+  - 超像素更粗糙，可能包含多個不同的區域或顏色。
+  - 適合處理整體大區域的粗略分割，運算速度較快。
+
+- K 值較高（例如 200-500）：
+  - 生成較多的超像素，每個超像素覆蓋範圍較小。
+  - 超像素邊界更加精細，能更準確捕捉細微的結構或細節。
+  - 適合需要精細分割的場景，但運算時間會增加。
 
