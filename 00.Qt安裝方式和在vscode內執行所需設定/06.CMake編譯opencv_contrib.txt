@@ -1,0 +1,38 @@
+opencv_contrib github: https://github.com/opencv/opencv_contrib
+csdn教學: https://blog.csdn.net/qq_37140815/article/details/105890671
+
+【cmake設定】
+cmake設定可以參考CMakeCache.txt
+
+【路徑配置】
+C:opencv--build
+	|
+	--mybuild (自己建立的空資料夾)
+	|
+	--opencv_contrib-4.x (解壓縮置此)
+	|
+	--......
+
+【VS建置】
+最後在VS裡面建置時
+執行完debug以後 把VS重開再執行release
+也可以反過來執行完release以後 重開VS再執行debug
+否則會跳一些怪怪的error
+
+【QT code.pro 下面新增這三行】
+# 根據建置模式（debug/release）設定 OpenCV 庫
+win32:CONFIG(release, debug|release): LIBS += -LC:\opencv\mybuild\install\x64\vc17\lib -lopencv_world4100
+else:win32:CONFIG(debug, debug|release): LIBS += -LC:\opencv\mybuild\install\x64\vc17\lib -lopencv_world4100d
+
+# 添加 DLL 路徑，確保執行時能找到
+win32:CONFIG(release, debug|release): LIBS += -LC:\opencv\mybuild\install\x64\vc17\bin
+else:win32:CONFIG(debug, debug|release): LIBS += -LC:\opencv\mybuild\install\x64\vc17\bin
+
+# 包含 OpenCV 的標頭檔
+INCLUDEPATH += C:\opencv\build\include C:\opencv\mybuild\include
+DEPENDPATH += C:\opencv\build\include C:\opencv\mybuild\include
+
+
+【手動將hpp複製到include opencv2內】
+到opencv_contrib-4.x/modules 內找到要引用的庫
+進到資料夾中的include內 將opencv2內所有內容 貼到"C:\opencv\mybuild\install\include"

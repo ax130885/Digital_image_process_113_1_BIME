@@ -10,7 +10,8 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
-// <opencv2/ximgproc.hpp>
+#include <opencv2/ximgproc.hpp>
+
 class GeneralProcess : public QObject
 {
     Q_OBJECT
@@ -60,23 +61,21 @@ public:
 
     // HW6
     // trapezoidal geometric transformation (梯形幾何轉換)
-    std::unique_ptr<QImage> trapezoidalGeometricTransformation(std::unique_ptr<QImage> &image, double topBase, double bottomBase, double h); // topBase: 上底, bottomBase: 下底, h: 高
+    std::unique_ptr<QImage> trapezoidalGeometricTransformation(std::unique_ptr<QImage> &image, double scaleX, double scaleY);
     // wavy geometric transformation (波浪幾何轉換)
     std::unique_ptr<QImage> wavyGeometricTransformation(std::unique_ptr<QImage> &image, double amplitude, double frequency, double phase);
     // circular geometric transformation (圓形幾何轉換)
-    std::unique_ptr<QImage> circularGeometricTransformation(std::unique_ptr<QImage> &image, double radius);
+    std::unique_ptr<QImage> circularGeometricTransformation(std::unique_ptr<QImage> &image);
 
     // 小波轉換
-    void dwt(const cv::Mat &src, cv::Mat &low, cv::Mat &highH, cv::Mat &highV, cv::Mat &highD, int level);
-    // 逆小波轉換
-    void idwt(const cv::Mat &low, const cv::Mat &highH, const cv::Mat &highV, const cv::Mat &highD, cv::Mat &dst, int level);
+    std::tuple<cv::Mat, cv::Mat, cv::Mat, cv::Mat> DWT(const cv::Mat &image);
+    // 反小波轉換
+    cv::Mat IDWT(const cv::Mat &LL, const cv::Mat &LH, const cv::Mat &HL, const cv::Mat &HH);
     // 使用小波轉換進行影像融合
-    std::unique_ptr<QImage> imageFusion(std::unique_ptr<QImage> &image1, std::unique_ptr<QImage> &image2, int level, QString waveletType = "Haar");
+    std::unique_ptr<QImage> imageFusion(const std::vector<std::unique_ptr<QImage>> &images, int level, QString waveletType);
 
-    // 計算歐幾里得距離
-    double euclideanDistance(const cv::Vec3b &p1, const cv::Vec3b &p2);
     // Simple Linear Iterative Clustering (SLIC) 實作超像素區域分割
-    std::unique_ptr<QImage> SLIC(std::unique_ptr<QImage> &image, int K, int m = 10, int maxIter = 10); // K: 超像素區域數量, m: 超像素區域大小, maxIter: 最大迭代次數
+    std::tuple<std::unique_ptr<QImage>, std::unique_ptr<QImage>, std::unique_ptr<QImage>> SLIC(std::unique_ptr<QImage> &image, int K, double m); // K: 超像素區域數量, m: 超像素區域權重
 
 signals:
 

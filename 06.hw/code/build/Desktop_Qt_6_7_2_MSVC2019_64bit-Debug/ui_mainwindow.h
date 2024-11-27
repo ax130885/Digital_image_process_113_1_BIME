@@ -45,8 +45,9 @@ public:
     QLabel *label_9;
     QGraphicsView *circularGeometricTransformationImage;
     QGridLayout *gridLayout_7;
-    QDoubleSpinBox *radiusSpinBox;
-    QLabel *label_24;
+    QVBoxLayout *verticalLayout;
+    QLabel *label;
+    QGraphicsView *originalImage;
     QGridLayout *gridLayout_6;
     QLabel *label_21;
     QLabel *label_22;
@@ -55,50 +56,52 @@ public:
     QDoubleSpinBox *frequencySpinBox;
     QDoubleSpinBox *phaseSpinBox;
     QGridLayout *gridLayout_5;
-    QLabel *label_17;
     QLabel *label_19;
-    QLabel *label_20;
-    QDoubleSpinBox *topBaseSpinBox;
-    QDoubleSpinBox *bottomBaseSpinBox;
-    QDoubleSpinBox *heightSpinBox;
-    QWidget *widget;
-    QVBoxLayout *verticalLayout;
-    QLabel *label;
-    QGraphicsView *originalImage;
+    QDoubleSpinBox *scaleXSpinBox;
+    QDoubleSpinBox *scaleYSpinBox;
+    QLabel *label_17;
     QWidget *DWTfusion;
     QPushButton *uploadfile_2;
     QWidget *gridLayoutWidget_2;
     QGridLayout *gridLayout_2;
-    QVBoxLayout *verticalLayout_2;
-    QLabel *label_2;
-    QGraphicsView *originalImage_2;
     QVBoxLayout *verticalLayout_4;
     QLabel *label_14;
     QGraphicsView *imageFusionImage;
-    QVBoxLayout *verticalLayout_10;
-    QLabel *label_10;
-    QGraphicsView *originalImage_3;
     QGridLayout *gridLayout_8;
     QDoubleSpinBox *levelSpinBox;
     QLabel *label_25;
+    QVBoxLayout *verticalLayout_2;
+    QLabel *label_2;
+    QGraphicsView *originalImage_2;
+    QVBoxLayout *verticalLayout_11;
+    QLabel *label_11;
+    QGraphicsView *originalImage_4;
+    QVBoxLayout *verticalLayout_10;
+    QLabel *label_10;
+    QGraphicsView *originalImage_3;
+    QVBoxLayout *verticalLayout_6;
+    QPushButton *uploadfile_4;
+    QPushButton *uploadfile_5;
+    QPushButton *uploadfile_6;
     QWidget *SLICseg;
     QPushButton *uploadfile_3;
     QWidget *gridLayoutWidget_3;
     QGridLayout *gridLayout_3;
     QVBoxLayout *verticalLayout_14;
     QLabel *label_18;
-    QGraphicsView *SLICImage;
+    QGraphicsView *segmentedImage;
     QVBoxLayout *verticalLayout_12;
-    QVBoxLayout *verticalLayout_3;
-    QLabel *label_3;
-    QGraphicsView *originalimage_4;
     QGridLayout *gridLayout_9;
     QSpinBox *KspinBox;
-    QSpinBox *MspinBox;
+    QDoubleSpinBox *MdoubleSpinBox;
     QLabel *label_27;
-    QSpinBox *maxIterSpinBox;
-    QLabel *label_28;
     QLabel *label_26;
+    QVBoxLayout *verticalLayout_3;
+    QLabel *label_3;
+    QGraphicsView *boundaryImage;
+    QVBoxLayout *verticalLayout_5;
+    QLabel *label_4;
+    QGraphicsView *originalimage_4;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -120,7 +123,7 @@ public:
         uploadfile->setGeometry(QRect(10, 20, 161, 51));
         gridLayoutWidget = new QWidget(GeometricTransformation);
         gridLayoutWidget->setObjectName("gridLayoutWidget");
-        gridLayoutWidget->setGeometry(QRect(10, 260, 1011, 381));
+        gridLayoutWidget->setGeometry(QRect(10, 90, 1011, 551));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName("gridLayout");
         gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -171,20 +174,20 @@ public:
 
         gridLayout_7 = new QGridLayout();
         gridLayout_7->setObjectName("gridLayout_7");
-        radiusSpinBox = new QDoubleSpinBox(gridLayoutWidget);
-        radiusSpinBox->setObjectName("radiusSpinBox");
-        radiusSpinBox->setMinimum(0.100000000000000);
-        radiusSpinBox->setMaximum(1.000000000000000);
-        radiusSpinBox->setSingleStep(0.100000000000000);
-        radiusSpinBox->setValue(0.800000000000000);
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setObjectName("verticalLayout");
+        label = new QLabel(gridLayoutWidget);
+        label->setObjectName("label");
 
-        gridLayout_7->addWidget(radiusSpinBox, 0, 1, 1, 1);
+        verticalLayout->addWidget(label);
 
-        label_24 = new QLabel(gridLayoutWidget);
-        label_24->setObjectName("label_24");
-        label_24->setAlignment(Qt::AlignmentFlag::AlignCenter);
+        originalImage = new QGraphicsView(gridLayoutWidget);
+        originalImage->setObjectName("originalImage");
 
-        gridLayout_7->addWidget(label_24, 0, 0, 1, 1);
+        verticalLayout->addWidget(originalImage);
+
+
+        gridLayout_7->addLayout(verticalLayout, 0, 0, 1, 1);
 
 
         gridLayout->addLayout(gridLayout_7, 0, 2, 1, 1);
@@ -211,13 +214,17 @@ public:
 
         amplitudeSpinBox = new QDoubleSpinBox(gridLayoutWidget);
         amplitudeSpinBox->setObjectName("amplitudeSpinBox");
-        amplitudeSpinBox->setValue(10.000000000000000);
+        amplitudeSpinBox->setValue(30.000000000000000);
 
         gridLayout_6->addWidget(amplitudeSpinBox, 0, 1, 1, 1);
 
         frequencySpinBox = new QDoubleSpinBox(gridLayoutWidget);
         frequencySpinBox->setObjectName("frequencySpinBox");
-        frequencySpinBox->setValue(10.000000000000000);
+        frequencySpinBox->setDecimals(4);
+        frequencySpinBox->setMinimum(0.000000000000000);
+        frequencySpinBox->setMaximum(99.989999999999995);
+        frequencySpinBox->setSingleStep(0.001000000000000);
+        frequencySpinBox->setValue(0.005000000000000);
 
         gridLayout_6->addWidget(frequencySpinBox, 1, 1, 1, 1);
 
@@ -234,69 +241,38 @@ public:
 
         gridLayout_5 = new QGridLayout();
         gridLayout_5->setObjectName("gridLayout_5");
-        label_17 = new QLabel(gridLayoutWidget);
-        label_17->setObjectName("label_17");
-        label_17->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        gridLayout_5->addWidget(label_17, 0, 0, 1, 1);
-
         label_19 = new QLabel(gridLayoutWidget);
         label_19->setObjectName("label_19");
         label_19->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         gridLayout_5->addWidget(label_19, 1, 0, 1, 1);
 
-        label_20 = new QLabel(gridLayoutWidget);
-        label_20->setObjectName("label_20");
-        label_20->setAlignment(Qt::AlignmentFlag::AlignCenter);
+        scaleXSpinBox = new QDoubleSpinBox(gridLayoutWidget);
+        scaleXSpinBox->setObjectName("scaleXSpinBox");
+        scaleXSpinBox->setMinimum(0.100000000000000);
+        scaleXSpinBox->setMaximum(1.000000000000000);
+        scaleXSpinBox->setSingleStep(0.100000000000000);
+        scaleXSpinBox->setValue(0.800000000000000);
 
-        gridLayout_5->addWidget(label_20, 2, 0, 1, 1);
+        gridLayout_5->addWidget(scaleXSpinBox, 0, 1, 1, 1);
 
-        topBaseSpinBox = new QDoubleSpinBox(gridLayoutWidget);
-        topBaseSpinBox->setObjectName("topBaseSpinBox");
-        topBaseSpinBox->setMinimum(0.100000000000000);
-        topBaseSpinBox->setMaximum(1.000000000000000);
-        topBaseSpinBox->setSingleStep(0.100000000000000);
-        topBaseSpinBox->setValue(0.800000000000000);
+        scaleYSpinBox = new QDoubleSpinBox(gridLayoutWidget);
+        scaleYSpinBox->setObjectName("scaleYSpinBox");
+        scaleYSpinBox->setMinimum(0.100000000000000);
+        scaleYSpinBox->setMaximum(1.000000000000000);
+        scaleYSpinBox->setSingleStep(0.100000000000000);
+        scaleYSpinBox->setValue(0.700000000000000);
 
-        gridLayout_5->addWidget(topBaseSpinBox, 0, 1, 1, 1);
+        gridLayout_5->addWidget(scaleYSpinBox, 1, 1, 1, 1);
 
-        bottomBaseSpinBox = new QDoubleSpinBox(gridLayoutWidget);
-        bottomBaseSpinBox->setObjectName("bottomBaseSpinBox");
-        bottomBaseSpinBox->setMinimum(0.100000000000000);
-        bottomBaseSpinBox->setMaximum(1.000000000000000);
-        bottomBaseSpinBox->setSingleStep(0.100000000000000);
-        bottomBaseSpinBox->setValue(0.700000000000000);
+        label_17 = new QLabel(gridLayoutWidget);
+        label_17->setObjectName("label_17");
+        label_17->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
-        gridLayout_5->addWidget(bottomBaseSpinBox, 1, 1, 1, 1);
-
-        heightSpinBox = new QDoubleSpinBox(gridLayoutWidget);
-        heightSpinBox->setObjectName("heightSpinBox");
-        heightSpinBox->setMinimum(0.100000000000000);
-        heightSpinBox->setMaximum(1.000000000000000);
-        heightSpinBox->setSingleStep(0.100000000000000);
-        heightSpinBox->setValue(0.900000000000000);
-
-        gridLayout_5->addWidget(heightSpinBox, 2, 1, 1, 1);
+        gridLayout_5->addWidget(label_17, 0, 0, 1, 1);
 
 
         gridLayout->addLayout(gridLayout_5, 0, 0, 1, 1);
-
-        widget = new QWidget(GeometricTransformation);
-        widget->setObjectName("widget");
-        widget->setGeometry(QRect(690, 10, 331, 231));
-        verticalLayout = new QVBoxLayout(widget);
-        verticalLayout->setObjectName("verticalLayout");
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        label = new QLabel(widget);
-        label->setObjectName("label");
-
-        verticalLayout->addWidget(label);
-
-        originalImage = new QGraphicsView(widget);
-        originalImage->setObjectName("originalImage");
-
-        verticalLayout->addWidget(originalImage);
 
         tabWidget->addTab(GeometricTransformation, QString());
         DWTfusion = new QWidget();
@@ -310,6 +286,42 @@ public:
         gridLayout_2 = new QGridLayout(gridLayoutWidget_2);
         gridLayout_2->setObjectName("gridLayout_2");
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
+        verticalLayout_4 = new QVBoxLayout();
+        verticalLayout_4->setObjectName("verticalLayout_4");
+        label_14 = new QLabel(gridLayoutWidget_2);
+        label_14->setObjectName("label_14");
+
+        verticalLayout_4->addWidget(label_14);
+
+        imageFusionImage = new QGraphicsView(gridLayoutWidget_2);
+        imageFusionImage->setObjectName("imageFusionImage");
+
+        verticalLayout_4->addWidget(imageFusionImage);
+
+
+        gridLayout_2->addLayout(verticalLayout_4, 0, 2, 1, 1);
+
+        gridLayout_8 = new QGridLayout();
+        gridLayout_8->setObjectName("gridLayout_8");
+        levelSpinBox = new QDoubleSpinBox(gridLayoutWidget_2);
+        levelSpinBox->setObjectName("levelSpinBox");
+        levelSpinBox->setDecimals(0);
+        levelSpinBox->setMinimum(1.000000000000000);
+        levelSpinBox->setMaximum(5.000000000000000);
+        levelSpinBox->setSingleStep(1.000000000000000);
+        levelSpinBox->setValue(1.000000000000000);
+
+        gridLayout_8->addWidget(levelSpinBox, 0, 1, 1, 1);
+
+        label_25 = new QLabel(gridLayoutWidget_2);
+        label_25->setObjectName("label_25");
+        label_25->setAlignment(Qt::AlignmentFlag::AlignCenter);
+
+        gridLayout_8->addWidget(label_25, 0, 0, 1, 1);
+
+
+        gridLayout_2->addLayout(gridLayout_8, 0, 0, 1, 1);
+
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName("verticalLayout_2");
         label_2 = new QLabel(gridLayoutWidget_2);
@@ -325,20 +337,20 @@ public:
 
         gridLayout_2->addLayout(verticalLayout_2, 1, 0, 1, 1);
 
-        verticalLayout_4 = new QVBoxLayout();
-        verticalLayout_4->setObjectName("verticalLayout_4");
-        label_14 = new QLabel(gridLayoutWidget_2);
-        label_14->setObjectName("label_14");
+        verticalLayout_11 = new QVBoxLayout();
+        verticalLayout_11->setObjectName("verticalLayout_11");
+        label_11 = new QLabel(gridLayoutWidget_2);
+        label_11->setObjectName("label_11");
 
-        verticalLayout_4->addWidget(label_14);
+        verticalLayout_11->addWidget(label_11);
 
-        imageFusionImage = new QGraphicsView(gridLayoutWidget_2);
-        imageFusionImage->setObjectName("imageFusionImage");
+        originalImage_4 = new QGraphicsView(gridLayoutWidget_2);
+        originalImage_4->setObjectName("originalImage_4");
 
-        verticalLayout_4->addWidget(imageFusionImage);
+        verticalLayout_11->addWidget(originalImage_4);
 
 
-        gridLayout_2->addLayout(verticalLayout_4, 0, 1, 1, 1);
+        gridLayout_2->addLayout(verticalLayout_11, 1, 2, 1, 1);
 
         verticalLayout_10 = new QVBoxLayout();
         verticalLayout_10->setObjectName("verticalLayout_10");
@@ -355,24 +367,25 @@ public:
 
         gridLayout_2->addLayout(verticalLayout_10, 1, 1, 1, 1);
 
-        gridLayout_8 = new QGridLayout();
-        gridLayout_8->setObjectName("gridLayout_8");
-        levelSpinBox = new QDoubleSpinBox(gridLayoutWidget_2);
-        levelSpinBox->setObjectName("levelSpinBox");
-        levelSpinBox->setMaximum(1.000000000000000);
-        levelSpinBox->setSingleStep(0.100000000000000);
-        levelSpinBox->setValue(0.800000000000000);
+        verticalLayout_6 = new QVBoxLayout();
+        verticalLayout_6->setObjectName("verticalLayout_6");
+        uploadfile_4 = new QPushButton(gridLayoutWidget_2);
+        uploadfile_4->setObjectName("uploadfile_4");
 
-        gridLayout_8->addWidget(levelSpinBox, 0, 1, 1, 1);
+        verticalLayout_6->addWidget(uploadfile_4);
 
-        label_25 = new QLabel(gridLayoutWidget_2);
-        label_25->setObjectName("label_25");
-        label_25->setAlignment(Qt::AlignmentFlag::AlignCenter);
+        uploadfile_5 = new QPushButton(gridLayoutWidget_2);
+        uploadfile_5->setObjectName("uploadfile_5");
 
-        gridLayout_8->addWidget(label_25, 0, 0, 1, 1);
+        verticalLayout_6->addWidget(uploadfile_5);
+
+        uploadfile_6 = new QPushButton(gridLayoutWidget_2);
+        uploadfile_6->setObjectName("uploadfile_6");
+
+        verticalLayout_6->addWidget(uploadfile_6);
 
 
-        gridLayout_2->addLayout(gridLayout_8, 0, 0, 1, 1);
+        gridLayout_2->addLayout(verticalLayout_6, 0, 1, 1, 1);
 
         tabWidget->addTab(DWTfusion, QString());
         SLICseg = new QWidget();
@@ -382,7 +395,7 @@ public:
         uploadfile_3->setGeometry(QRect(10, 20, 161, 51));
         gridLayoutWidget_3 = new QWidget(SLICseg);
         gridLayoutWidget_3->setObjectName("gridLayoutWidget_3");
-        gridLayoutWidget_3->setGeometry(QRect(10, 80, 1021, 541));
+        gridLayoutWidget_3->setGeometry(QRect(10, 80, 1021, 561));
         gridLayout_3 = new QGridLayout(gridLayoutWidget_3);
         gridLayout_3->setObjectName("gridLayout_3");
         gridLayout_3->setContentsMargins(0, 0, 0, 0);
@@ -393,10 +406,10 @@ public:
 
         verticalLayout_14->addWidget(label_18);
 
-        SLICImage = new QGraphicsView(gridLayoutWidget_3);
-        SLICImage->setObjectName("SLICImage");
+        segmentedImage = new QGraphicsView(gridLayoutWidget_3);
+        segmentedImage->setObjectName("segmentedImage");
 
-        verticalLayout_14->addWidget(SLICImage);
+        verticalLayout_14->addWidget(segmentedImage);
 
 
         gridLayout_3->addLayout(verticalLayout_14, 1, 2, 1, 1);
@@ -406,56 +419,30 @@ public:
 
         gridLayout_3->addLayout(verticalLayout_12, 1, 0, 1, 1);
 
-        verticalLayout_3 = new QVBoxLayout();
-        verticalLayout_3->setObjectName("verticalLayout_3");
-        label_3 = new QLabel(gridLayoutWidget_3);
-        label_3->setObjectName("label_3");
-
-        verticalLayout_3->addWidget(label_3);
-
-        originalimage_4 = new QGraphicsView(gridLayoutWidget_3);
-        originalimage_4->setObjectName("originalimage_4");
-
-        verticalLayout_3->addWidget(originalimage_4);
-
-
-        gridLayout_3->addLayout(verticalLayout_3, 1, 1, 1, 1);
-
         gridLayout_9 = new QGridLayout();
         gridLayout_9->setObjectName("gridLayout_9");
         KspinBox = new QSpinBox(gridLayoutWidget_3);
         KspinBox->setObjectName("KspinBox");
-        KspinBox->setMinimum(100);
-        KspinBox->setMaximum(1000);
+        KspinBox->setMinimum(1);
+        KspinBox->setMaximum(999);
         KspinBox->setSingleStep(100);
+        KspinBox->setValue(99);
+        KspinBox->setDisplayIntegerBase(10);
 
         gridLayout_9->addWidget(KspinBox, 0, 1, 1, 1);
 
-        MspinBox = new QSpinBox(gridLayoutWidget_3);
-        MspinBox->setObjectName("MspinBox");
-        MspinBox->setMinimum(1);
-        MspinBox->setMaximum(40);
-        MspinBox->setValue(10);
+        MdoubleSpinBox = new QDoubleSpinBox(gridLayoutWidget_3);
+        MdoubleSpinBox->setObjectName("MdoubleSpinBox");
+        MdoubleSpinBox->setSingleStep(0.100000000000000);
+        MdoubleSpinBox->setValue(0.200000000000000);
 
-        gridLayout_9->addWidget(MspinBox, 1, 1, 1, 1);
+        gridLayout_9->addWidget(MdoubleSpinBox, 1, 1, 1, 1);
 
         label_27 = new QLabel(gridLayoutWidget_3);
         label_27->setObjectName("label_27");
         label_27->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         gridLayout_9->addWidget(label_27, 1, 0, 1, 1);
-
-        maxIterSpinBox = new QSpinBox(gridLayoutWidget_3);
-        maxIterSpinBox->setObjectName("maxIterSpinBox");
-        maxIterSpinBox->setValue(10);
-
-        gridLayout_9->addWidget(maxIterSpinBox, 2, 1, 1, 1);
-
-        label_28 = new QLabel(gridLayoutWidget_3);
-        label_28->setObjectName("label_28");
-        label_28->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        gridLayout_9->addWidget(label_28, 2, 0, 1, 1);
 
         label_26 = new QLabel(gridLayoutWidget_3);
         label_26->setObjectName("label_26");
@@ -466,11 +453,41 @@ public:
 
         gridLayout_3->addLayout(gridLayout_9, 0, 2, 1, 1);
 
+        verticalLayout_3 = new QVBoxLayout();
+        verticalLayout_3->setObjectName("verticalLayout_3");
+        label_3 = new QLabel(gridLayoutWidget_3);
+        label_3->setObjectName("label_3");
+
+        verticalLayout_3->addWidget(label_3);
+
+        boundaryImage = new QGraphicsView(gridLayoutWidget_3);
+        boundaryImage->setObjectName("boundaryImage");
+
+        verticalLayout_3->addWidget(boundaryImage);
+
+
+        gridLayout_3->addLayout(verticalLayout_3, 1, 1, 1, 1);
+
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setObjectName("verticalLayout_5");
+        label_4 = new QLabel(gridLayoutWidget_3);
+        label_4->setObjectName("label_4");
+
+        verticalLayout_5->addWidget(label_4);
+
+        originalimage_4 = new QGraphicsView(gridLayoutWidget_3);
+        originalimage_4->setObjectName("originalimage_4");
+
+        verticalLayout_5->addWidget(originalimage_4);
+
+
+        gridLayout_3->addLayout(verticalLayout_5, 0, 1, 1, 1);
+
         tabWidget->addTab(SLICseg, QString());
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1080, 24));
+        menubar->setGeometry(QRect(0, 0, 1080, 20));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -478,7 +495,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -491,27 +508,29 @@ public:
         label_7->setText(QCoreApplication::translate("MainWindow", "\346\242\257\345\275\242", nullptr));
         label_8->setText(QCoreApplication::translate("MainWindow", "\346\263\242\346\265\252", nullptr));
         label_9->setText(QCoreApplication::translate("MainWindow", "\345\234\223\345\275\242", nullptr));
-        label_24->setText(QCoreApplication::translate("MainWindow", "\345\215\212\345\276\221 (\346\257\224\344\276\213)", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Original", nullptr));
         label_21->setText(QCoreApplication::translate("MainWindow", "\351\234\207\345\271\205 (pixel)", nullptr));
         label_22->setText(QCoreApplication::translate("MainWindow", "\351\240\273\347\216\207 (rad/pixel)", nullptr));
         label_23->setText(QCoreApplication::translate("MainWindow", "\347\233\270\344\275\215 (rad) (0~6.28(2pi))", nullptr));
-        label_17->setText(QCoreApplication::translate("MainWindow", "\344\270\212\345\272\225 (\346\257\224\344\276\213)", nullptr));
-        label_19->setText(QCoreApplication::translate("MainWindow", "\344\270\213\345\272\225 (\346\257\224\344\276\213)", nullptr));
-        label_20->setText(QCoreApplication::translate("MainWindow", "\351\253\230 (\346\257\224\344\276\213)", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Original", nullptr));
+        label_19->setText(QCoreApplication::translate("MainWindow", "y \350\273\270\347\270\256\346\224\276\346\257\224\344\276\213", nullptr));
+        label_17->setText(QCoreApplication::translate("MainWindow", "x \350\273\270\347\270\256\346\224\276\346\257\224\344\276\213", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(GeometricTransformation), QCoreApplication::translate("MainWindow", "GeometricTransformation", nullptr));
-        uploadfile_2->setText(QCoreApplication::translate("MainWindow", "upload file", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "image1", nullptr));
+        uploadfile_2->setText(QCoreApplication::translate("MainWindow", "apply fusion", nullptr));
         label_14->setText(QCoreApplication::translate("MainWindow", "\350\236\215\345\220\210\347\265\220\346\236\234", nullptr));
-        label_10->setText(QCoreApplication::translate("MainWindow", "image2", nullptr));
         label_25->setText(QCoreApplication::translate("MainWindow", "level ", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "image1", nullptr));
+        label_11->setText(QCoreApplication::translate("MainWindow", "image3", nullptr));
+        label_10->setText(QCoreApplication::translate("MainWindow", "image2", nullptr));
+        uploadfile_4->setText(QCoreApplication::translate("MainWindow", "upload image 1", nullptr));
+        uploadfile_5->setText(QCoreApplication::translate("MainWindow", "upload image 2", nullptr));
+        uploadfile_6->setText(QCoreApplication::translate("MainWindow", "(optional) upload image 3", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(DWTfusion), QCoreApplication::translate("MainWindow", "DWTfusion", nullptr));
         uploadfile_3->setText(QCoreApplication::translate("MainWindow", "upload file", nullptr));
         label_18->setText(QCoreApplication::translate("MainWindow", "SegResult", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "Original imamge", nullptr));
         label_27->setText(QCoreApplication::translate("MainWindow", "m", nullptr));
-        label_28->setText(QCoreApplication::translate("MainWindow", "max_iter", nullptr));
         label_26->setText(QCoreApplication::translate("MainWindow", "K", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "SLIC\351\202\212\347\225\214", nullptr));
+        label_4->setText(QCoreApplication::translate("MainWindow", "Original imamge", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(SLICseg), QCoreApplication::translate("MainWindow", "SLICseg", nullptr));
     } // retranslateUi
 

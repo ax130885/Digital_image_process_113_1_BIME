@@ -13,16 +13,8 @@ Design a computer program for geometric transformation of an image. Try to find 
 ![alt text](image.png)
 
 ## 【結果圖片】
-
-| ![alt text](readme_figure/image.png) | ![alt text](readme_figure/image-1.png) |
-| :----------------------------------: | :------------------------------------: |
-
-| ![alt text](readme_figure/image-2.png) | ![alt text](readme_figure/image-3.png) |
-| :------------------------------------: | :------------------------------------: |
-
-| ![alt text](readme_figure/image-4.png) | ![alt text](readme_figure/image-15.png) |
-| :------------------------------------: | :-------------------------------------: |
- 
+![alt text](image-3.png)
+![alt text](image-4.png)
 
 <br/>
 
@@ -52,8 +44,11 @@ Implement an image fusion program applying the DWT method as described above.
 
 
 ## 【結果圖片】
-
-
+![alt text](image-5.png)
+![alt text](image-6.png)
+![alt text](image-7.png)
+![alt text](image-8.png)
+![alt text](image-9.png)
 <br/>
 
 # Part 3. 
@@ -80,8 +75,10 @@ You are given a digital image and your task is to perform regional segmentation 
 <!-- <br/> -->
 
 ## 【結果圖片】
-
-
+![alt text](image-10.png)
+![alt text](image-11.png)
+![alt text](image-12.png)
+![alt text](image-13.png)
 ## 【結果討論】
 
 
